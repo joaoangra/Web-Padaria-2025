@@ -236,7 +236,7 @@ input {
 }
 
 .faixa-fundo {
-    background-image: url(/docs/faixa.png);
+    background-image: url(../docs/faixa.png);
     background-repeat: no-repeat;
     background-size: cover;
     padding: 60px 20px;
