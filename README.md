@@ -59,7 +59,7 @@ Funcionalidades principais implementadas, como:
 
 ## Requisitos Funcionais
 
-- [RF001] - [] O sistema deve permitir que o Cliente realize pedidos, escolhendo os itens desejados.
+- [ ] - [RF001] O sistema deve permitir que o Cliente realize pedidos, escolhendo os itens desejados.
 - [RF002] - [x] O sistema deve permitir que Clientes, Funcionários e Gerente verifiquem a disponibilidade de itens no estoque.
 - [RF003] - [x] O sistema deve permitir que o Cliente realize o pagamento do pedido.
 - [RF004] - [x] O sistema deve processar a compra, incluindo cálculo de valores, validação do pagamento e registro do pedido.
