@@ -1,5 +1,7 @@
 # Projeto-padaria-2025
 
+- [- GIT PAGES ](https://joaoangra.github.io/Web-Padaria-2025/web/Home.html)
+
 # **Integrantes**
 -  [Rebeca Lima](https://github.com/Rebecaalimaa)
 - [Steffany Giovanna](https://github.com/steffanygiovanna)
@@ -38,7 +40,7 @@
 - [x] Análise de Viabilidade com Matriz SWOT
 - [x] Triângulo da qualidade do Projeto (Escopo, Prazo e Custo)
 
-## Proxima Sprint (Sprint 04 - 03/09)
+## Proxima Sprint (Sprint 04 - 03/09) 
 Funcionalidades principais implementadas, como:
 - [ ] Back-End - CRUDs (Cadastro, Listagem, alteração e exclusão) das principais **tabelas**.
 - [ ] Back-Front - CRUDs das principais **Telas** com Responsividade.
