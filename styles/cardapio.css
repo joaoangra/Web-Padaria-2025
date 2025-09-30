@@ -527,144 +527,26 @@ nav ul li:hover a::after {
     }
 
 
-/* ========= BASE RESPONSIVA (AUMENTADA) ========= */
-
-@media (max-width: 991px) {
-    html {
-        font-size: 90%; /* Era 55% — agora bem mais legível */
-    }
-
-    header {
-        padding: 2rem;
-    }
-
-    section {
-        padding: 2rem;
-    }
-
-    .modal-content {
-        width: 90%;
-        margin: 10% auto;
-    }
-
-    .stars i {
-        margin-right: 20px;
-    }
+.estoque {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  width: fit-content;
 }
 
-@media (max-width: 768px) {
-    html {
-        font-size: 85%;
-    }
-
-    nav ul {
-        flex-direction: column;
-        gap: 1.5rem;
-        padding: 1rem;
-    }
-
-    nav ul li {
-        margin: 0.8rem 0;
-    }
-
-    .products .box-container {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .modal-content {
-        width: 95%;
-        max-width: 450px;
-        margin: 15% auto;
-        padding: 20px;
-    }
-
-    .close {
-        font-size: 28px;
-        right: 15px;
-        top: 5px;
-    }
-
-    #modal-img {
-        max-height: 180px;
-    }
-
-    #modal-nome {
-        font-size: 2.2rem;
-    }
-
-    #modal-desc {
-        font-size: 1.6rem;
-    }
-
-    #modal-preco {
-        font-size: 2rem;
-    }
-
-    #modal-avaliacao {
-        font-size: 1.6rem;
-    }
-
-    .stars i {
-        margin-right: 10px;
-        font-size: 1.8rem;
-    }
+.em-estoque {
+  color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.2);
 }
 
-@media (max-width: 550px) {
-    html {
-        font-size: 80%;
-    }
-
-    .products .box-container {
-        grid-template-columns: 1fr;
-    }
-
-    .products .box-container .box .image img {
-        height: 10rem;
-    }
-
-    .heading {
-        font-size: 3.2rem;
-    }
-
-    nav ul li a {
-        font-size: 1.8rem;
-    }
-
-    .logo img {
-        height: 50px;
-    }
-
-    .modal-content {
-        max-width: 400px;
-        margin: 20% auto;
-        padding: 18px;
-    }
-
-    #modal-img {
-        max-height: 150px;
-    }
-
-    #modal-nome {
-        font-size: 2rem;
-    }
-
-    #modal-desc {
-        font-size: 1.4rem;
-    }
-
-    #modal-preco {
-        font-size: 1.8rem;
-    }
-
-    #modal-avaliacao {
-        font-size: 1.4rem;
-    }
+.fora-estoque {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.2);
+  cursor: not-allowed;
+  user-select: none;
 }
 
 @media (max-width: 450px) {

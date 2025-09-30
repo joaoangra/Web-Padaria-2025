@@ -5,7 +5,8 @@ const cardapio = [
     "descricao": "Pão crocante por fora e macio por dentro, ideal para o café da manhã.",
     "preco": 0.80,
     "peso": 0.05,
-    "imagem": "../docs/Imagem/Pão.jpg"
+    "imagem": "../docs/Imagem/Pão.jpg",
+    "estoque": true
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@ const cardapio = [
     "descricao": "Feito com ingredientes selecionados, perfeito para sanduíches.",
     "preco": 7.00,
     "peso": 0.4,
-    "imagem": "../docs/Imagem/pao de forma artesanal.jpg"
+    "imagem": "../docs/Imagem/pao de forma artesanal.jpg",
+    "estoque": true
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@ const cardapio = [
     "descricao": "Pão saudável com farinha de centeio e grãos, ideal para dietas balanceadas.",
     "preco": 8.00,
     "peso": 0.4,
-    "imagem": "../docs/Imagem/pao de centeio.jpg"
+    "imagem": "../docs/Imagem/pao de centeio.jpg",
+    "estoque": true
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@ const cardapio = [
     "descricao": "Pão macio com sabor leve de milho, ótimo para lanches.",
     "preco": 7.50,
     "peso": 0.3,
-    "imagem": "../docs/Imagem/pao de milho.jpg"
+    "imagem": "../docs/Imagem/pao de milho.jpg",
+    "estoque": true
   },
   {
     "id": 5,
@@ -37,7 +41,8 @@ const cardapio = [
     "descricao": "Pão fofinho e levemente adocicado, ideal para o lanche da tarde.",
     "preco": 6.00,
     "peso": 0.3,
-    "imagem": "../docs/Imagem/pao de leite.jpg"
+    "imagem": "../docs/Imagem/pao de leite.jpg",
+    "estoque": true
   },
   {
     "id": 6,
@@ -45,7 +50,8 @@ const cardapio = [
     "descricao": "Pão recheado com calabresa e queijo, sabor marcante e irresistível.",
     "preco": 9.00,
     "peso": 0.35,
-    "imagem": "../docs/Imagem/Pão de Calabresa com Queijo.jpeg"
+    "imagem": "../docs/Imagem/Pão de Calabresa com Queijo.jpeg",
+    "estoque": false
   },
   {
     "id": 7,
@@ -53,7 +59,8 @@ const cardapio = [
     "descricao": "Clássico pão de alho assado, crocante e saboroso.",
     "preco": 3.50,
     "peso": 0.12,
-    "imagem": "../docs/Imagem/Pão de Alho Assado.jpg"
+    "imagem": "../docs/Imagem/Pão de Alho Assado.jpg",
+    "estoque": true
   },
   {
     "id": 8,
@@ -61,7 +68,8 @@ const cardapio = [
     "descricao": "Esfirra macia e recheada com carne temperada no ponto certo.",
     "preco": 6.00,
     "peso": 0.15,
-    "imagem": "../docs/Imagem/Esfirra de Carne.jpg"
+    "imagem": "../docs/Imagem/Esfirra de Carne.jpg",
+    "estoque": false
   },
   {
     "id": 9,
@@ -69,7 +77,8 @@ const cardapio = [
     "descricao": "Salsicha envolta em massa macia, também conhecido como doguinho.",
     "preco": 5.50,
     "peso": 0.13,
-    "imagem": "../docs/Imagem/Enrolado de Salsicha (Doguinho).jpg"
+    "imagem": "../docs/Imagem/Enrolado de Salsicha (Doguinho).jpg",
+    "estoque": true
   },
   {
     "id": 10,
@@ -77,7 +86,8 @@ const cardapio = [
     "descricao": "Croissant folhado recheado com presunto e queijo derretido.",
     "preco": 7.00,
     "peso": 0.14,
-    "imagem": "../docs/Imagem/Croissant de Presunto e Queijo.jpg"
+    "imagem": "../docs/Imagem/Croissant de Presunto e Queijo.jpg",
+    "estoque": true
   },
   {
     "id": 11,
@@ -85,7 +95,8 @@ const cardapio = [
     "descricao": "Pastel assado com recheio saboroso de carne ou frango.",
     "preco": 6.50,
     "peso": 0.15,
-    "imagem": "../docs/Imagem/Pastel de Forno.jpg"
+    "imagem": "../docs/Imagem/Pastel de Forno.jpg",
+    "estoque": true
   },
   {
     "id": 12,
@@ -93,7 +104,8 @@ const cardapio = [
     "descricao": "Empada tradicional recheada com frango desfiado e temperado.",
     "preco": 5.00,
     "peso": 0.12,
-    "imagem": "../docs/Imagem/Empada de Frango.png"
+    "imagem": "../docs/Imagem/Empada de Frango.png",
+    "estoque": true
   },
   {
     "id": 13,
@@ -101,7 +113,8 @@ const cardapio = [
     "descricao": "Massa macia com molho, queijo e calabresa fatiada.",
     "preco": 7.00,
     "peso": 0.2,
-    "imagem": "../docs/Imagem/Mini Pizza de Calabresa.jpg"
+    "imagem": "../docs/Imagem/Mini Pizza de Calabresa.jpg",
+    "estoque": true
   },
   {
     "id": 14,
@@ -109,7 +122,8 @@ const cardapio = [
     "descricao": "Fatia de torta caseira recheada com frango cremoso.",
     "preco": 6.50,
     "peso": 0.18,
-    "imagem": "../docs/Imagem/Torta Salgada de Frango.jpg"
+    "imagem": "../docs/Imagem/Torta Salgada de Frango.jpg",
+    "estoque": true
   },
   {
     "id": 15,
@@ -117,7 +131,8 @@ const cardapio = [
     "descricao": "Pão artesanal com presunto e queijo derretido na chapa.",
     "preco": 8.00,
     "peso": 0.25,
-    "imagem": "../docs/Imagem/Misto Quente Artesanal.jpeg"
+    "imagem": "../docs/Imagem/Misto Quente Artesanal.jpeg",
+    "estoque": true
   },
   {
     "id": 16,
@@ -125,7 +140,8 @@ const cardapio = [
     "descricao": "Café coado tradicional, quente e encorpado.",
     "preco": 3.00,
     "peso": 0.2,
-    "imagem": "../docs/Imagem/Café.jpg"
+    "imagem": "../docs/Imagem/Café.jpg",
+    "estoque": true
   },
   {
     "id": 17,
@@ -133,7 +149,8 @@ const cardapio = [
     "descricao": "Café expresso intenso, extraído na hora.",
     "preco": 4.00,
     "peso": 0.05,
-    "imagem": "../docs/Imagem/Café Expresso.jpg"
+    "imagem": "../docs/Imagem/Café Expresso.jpg",
+    "estoque": true
   },
   {
     "id": 18,
@@ -141,7 +158,8 @@ const cardapio = [
     "descricao": "Bebida cremosa com café, leite e chocolate.",
     "preco": 6.00,
     "peso": 0.2,
-    "imagem": "../docs/Imagem/Cappuccino Cremoso.jpg"
+    "imagem": "../docs/Imagem/Cappuccino Cremoso.jpg",
+    "estoque": true
   },
   {
     "id": 19,
@@ -149,7 +167,8 @@ const cardapio = [
     "descricao": "Suco natural da fruta, sem conservantes.",
     "preco": 5.00,
     "peso": 0.3,
-    "imagem": "../docs/Imagem/Suco Natural.jpg"
+    "imagem": "../docs/Imagem/Suco Natural.jpg",
+    "estoque": true
   },
   {
     "id": 20,
@@ -157,7 +176,8 @@ const cardapio = [
     "descricao": "Chá quente, ideal para relaxar a qualquer hora.",
     "preco": 3.50,
     "peso": 0.2,
-    "imagem": "../docs/Imagem/Chá Quente.jpg"
+    "imagem": "../docs/Imagem/Chá Quente.jpg",
+    "estoque": false
   },
   {
     "id": 21,
@@ -165,7 +185,8 @@ const cardapio = [
     "descricao": "Bala refrescante para hálito puro e fresco.",
     "preco": 2.50,
     "peso": 0.03,
-    "imagem": "../docs/Imagem/Bala Halls.jpg"
+    "imagem": "../docs/Imagem/Bala Halls.jpg",
+    "estoque": true
   },
   {
     "id": 22,
@@ -173,7 +194,8 @@ const cardapio = [
     "descricao": "Goma de mascar com sabores variados e refrescantes.",
     "preco": 2.50,
     "peso": 0.02,
-    "imagem": "../docs/Imagem/Trident.jpg"
+    "imagem": "../docs/Imagem/Trident.jpg",
+    "estoque": false
   },
   {
     "id": 23,
@@ -181,7 +203,8 @@ const cardapio = [
     "descricao": "Bala macia com sabor suave de iogurte.",
     "preco": 0.50,
     "peso": 0.01,
-    "imagem": "../docs/Imagem/Bala de Iogurte.jpg"
+    "imagem": "../docs/Imagem/Bala de Iogurte.jpg",
+    "estoque": true
   },
   {
     "id": 24,
@@ -189,7 +212,8 @@ const cardapio = [
     "descricao": "Pastilha mastigável com sabores frutados ou menta.",
     "preco": 3.00,
     "peso": 0.03,
-    "imagem": "../docs/Imagem/Mentos.jpg"
+    "imagem": "../docs/Imagem/Mentos.jpg",
+    "estoque": true
   },
   {
     "id": 25,
@@ -197,6 +221,7 @@ const cardapio = [
     "descricao": "Balas refrescantes em embalagem prática.",
     "preco": 3.00,
     "peso": 0.03,
-    "imagem": "../docs/Imagem/Tic Tac.jpeg"
+    "imagem": "../docs/Imagem/Tic Tac.jpeg",
+    "estoque": true
   }
 ];

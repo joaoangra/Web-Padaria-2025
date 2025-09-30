@@ -14,9 +14,11 @@ menuLinks.forEach(link => {
 cardapio.forEach(produto => {
   const box = document.createElement('div');
   box.className = 'box';
+  const estoqueTexto = produto.estoque ? 'Em estoque' : 'Fora de estoque';
+  const estoqueClasse = produto.estoque ? 'em-estoque' : 'fora-estoque';
   box.innerHTML = `
     <div class="icons">
-      <a href="#" class="fas fa-shopping-cart btn-cart" data-id="${produto.id}"></a>
+      <a href="#" class="fas fa-shopping-cart btn-cart" data-id="${produto.id}" ${produto.estoque ? '' : 'style="pointer-events:none; opacity:0.5;"'}></a>
       <a href="#" class="fas fa-heart btn-fav" data-id="${produto.id}"></a>
       <a href="#" class="fas fa-eye btn-view" data-id="${produto.id}"></a>
     </div>
@@ -31,6 +33,7 @@ cardapio.forEach(produto => {
         <i class="fas fa-star-half-alt"></i>
       </div>
       <div class="price">R$ ${produto.preco.toFixed(2).replace('.', ',')}</div>
+      <div class="estoque ${estoqueClasse}">${estoqueTexto}</div>
     </div>`;
   container.appendChild(box);
 });
