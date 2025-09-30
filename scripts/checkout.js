@@ -186,7 +186,19 @@ function validarFormulario() {
 
 function finalizarPedido() {
     const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
-    
+
+    // Clear the cart in localStorage
+    localStorage.removeItem('carrinho');
+
+    // Update UI or any cart display if needed
+    if (typeof mostrarCarrinhoSidebar === 'function') {
+        mostrarCarrinhoSidebar();
+    }
+
+    processarPagamento(formaPagamento);
+}
+
+function processarPagamento(formaPagamento) {
     switch (formaPagamento) {
         case 'cartao':
             processarPagamentoCartao();

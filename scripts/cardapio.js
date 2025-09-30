@@ -15,7 +15,7 @@ const cardapio = [
     "preco": 7.00,
     "peso": 0.4,
     "imagem": "../docs/Imagem/pao de forma artesanal.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 3,
@@ -33,7 +33,7 @@ const cardapio = [
     "preco": 7.50,
     "peso": 0.3,
     "imagem": "../docs/Imagem/pao de milho.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 5,
@@ -87,7 +87,7 @@ const cardapio = [
     "preco": 7.00,
     "peso": 0.14,
     "imagem": "../docs/Imagem/Croissant de Presunto e Queijo.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 11,
@@ -105,7 +105,7 @@ const cardapio = [
     "preco": 5.00,
     "peso": 0.12,
     "imagem": "../docs/Imagem/Empada de Frango.png",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 13,
@@ -123,7 +123,7 @@ const cardapio = [
     "preco": 6.50,
     "peso": 0.18,
     "imagem": "../docs/Imagem/Torta Salgada de Frango.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 15,
@@ -141,7 +141,7 @@ const cardapio = [
     "preco": 3.00,
     "peso": 0.2,
     "imagem": "../docs/Imagem/Café.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 17,
@@ -159,7 +159,7 @@ const cardapio = [
     "preco": 6.00,
     "peso": 0.2,
     "imagem": "../docs/Imagem/Cappuccino Cremoso.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 19,
@@ -213,7 +213,7 @@ const cardapio = [
     "preco": 3.00,
     "peso": 0.03,
     "imagem": "../docs/Imagem/Mentos.jpg",
-    "estoque": true
+    "estoque": false
   },
   {
     "id": 25,

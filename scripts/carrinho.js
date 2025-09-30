@@ -90,6 +90,11 @@ function adicionarAoCarrinho(produto) {
 }
 
 function finalizarPedido() {
+  const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio. Adicione itens antes de finalizar o pedido.");
+    return;
+  }
   try {
     console.log("Navegando para checkout");
     window.location.href = "checkout.html";
