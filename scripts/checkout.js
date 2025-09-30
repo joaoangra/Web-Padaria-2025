@@ -26,10 +26,10 @@ function atualizarResumo() {
     const resumoItens = document.getElementById('resumo-itens');
     const subtotalEl = document.getElementById('subtotal');
     const totalFinalEl = document.getElementById('total-final');
-    
+
     let subtotal = 0;
     let html = '';
-    
+
     carrinho.forEach(item => {
         subtotal += item.total;
         html += `
@@ -39,31 +39,40 @@ function atualizarResumo() {
             </div>
         `;
     });
-    
-    const taxaEntrega = 5.00;
+
+    const recebimento = document.querySelector('input[name="recebimento"]:checked');
+    const taxaEntrega = (recebimento && recebimento.value === 'retirada') ? 0.00 : 5.00;
     const total = subtotal + taxaEntrega;
-    
+
     resumoItens.innerHTML = html;
     subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
     totalFinalEl.innerHTML = `<strong>R$ ${total.toFixed(2).replace('.', ',')}</strong>`;
 }
 
 function configurarEventListeners() {
+    const recebimentoOptions = document.querySelectorAll('input[name="recebimento"]');
+    recebimentoOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            mostrarEndereco(this.value);
+            atualizarResumo();
+        });
+    });
+
     const paymentOptions = document.querySelectorAll('input[name="pagamento"]');
     paymentOptions.forEach(option => {
         option.addEventListener('change', function() {
             mostrarFormularioPagamento(this.value);
         });
     });
-    
+
     document.getElementById('btn-finalizar').addEventListener('click', finalizarPedido);
-    
+
     document.getElementById('btn-copiar-pix').addEventListener('click', copiarCodigoPix);
-    
+
     document.getElementById('btn-novo-pedido').addEventListener('click', function() {
         window.location.href = 'cardapio.html';
     });
-    
+
     const inputs = document.querySelectorAll('input[required]');
     inputs.forEach(input => {
         input.addEventListener('input', validarFormulario);
@@ -113,13 +122,33 @@ function configurarMascaras() {
 function mostrarFormularioPagamento(tipo) {
     document.getElementById('cartao-form').style.display = 'none';
     document.getElementById('dinheiro-form').style.display = 'none';
-    
+
     if (tipo === 'cartao') {
         document.getElementById('cartao-form').style.display = 'block';
     } else if (tipo === 'dinheiro') {
         document.getElementById('dinheiro-form').style.display = 'block';
     }
-    
+
+    validarFormulario();
+}
+
+function mostrarEndereco(tipo) {
+    const enderecoSection = document.getElementById('section-endereco');
+    const enderecoInputs = enderecoSection.querySelectorAll('input');
+
+    if (tipo === 'retirada') {
+        enderecoSection.style.display = 'none';
+        enderecoInputs.forEach(input => {
+            input.required = false;
+            input.value = '';
+        });
+    } else {
+        enderecoSection.style.display = 'block';
+        enderecoInputs.forEach(input => {
+            input.required = true;
+        });
+    }
+
     validarFormulario();
 }
 
@@ -127,24 +156,31 @@ function validarFormulario() {
     const nome = document.getElementById('nome').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
     const email = document.getElementById('email').value.trim();
-    const cep = document.getElementById('cep').value.trim();
-    const rua = document.getElementById('rua').value.trim();
-    const numero = document.getElementById('numero').value.trim();
-    const bairro = document.getElementById('bairro').value.trim();
-    const cidade = document.getElementById('cidade').value.trim();
+    const recebimento = document.querySelector('input[name="recebimento"]:checked');
     const pagamento = document.querySelector('input[name="pagamento"]:checked');
-    
-    let isValid = nome && telefone && email && cep && rua && numero && bairro && cidade && pagamento;
-    
+
+    let isValid = nome && telefone && email && recebimento && pagamento;
+
+    // Address validation only for delivery
+    if (recebimento && recebimento.value === 'entrega') {
+        const cep = document.getElementById('cep').value.trim();
+        const rua = document.getElementById('rua').value.trim();
+        const numero = document.getElementById('numero').value.trim();
+        const bairro = document.getElementById('bairro').value.trim();
+        const cidade = document.getElementById('cidade').value.trim();
+
+        isValid = isValid && cep && rua && numero && bairro && cidade;
+    }
+
     if (pagamento && pagamento.value === 'cartao') {
         const numeroCartao = document.getElementById('numero-cartao').value.trim();
         const nomeCartao = document.getElementById('nome-cartao').value.trim();
         const validade = document.getElementById('validade').value.trim();
         const cvv = document.getElementById('cvv').value.trim();
-        
+
         isValid = isValid && numeroCartao && nomeCartao && validade && cvv;
     }
-    
+
     document.getElementById('btn-finalizar').disabled = !isValid;
 }
 
@@ -168,10 +204,14 @@ function processarPagamentoCartao() {
     mostrarModal('processamento');
     document.getElementById('modal-title').textContent = 'Processando pagamento...';
     document.getElementById('modal-message').textContent = 'Aguarde enquanto processamos seu cartão.';
-    
+
     setTimeout(() => {
         fecharModal('processamento');
-        mostrarSucesso('Pagamento aprovado! Aguarde o pedido em sua residência.');
+        const recebimento = document.querySelector('input[name="recebimento"]:checked').value;
+        const mensagem = recebimento === 'retirada'
+            ? 'Pagamento aprovado! Aguarde o pedido para retirada na loja.'
+            : 'Pagamento aprovado! Aguarde o pedido em sua residência.';
+        mostrarSucesso(mensagem);
     }, 30000);
 }
 
@@ -179,26 +219,34 @@ function processarPagamentoPix() {
     mostrarModal('processamento');
     document.getElementById('modal-title').textContent = 'Aprovando pagamento';
     document.getElementById('modal-message').textContent = 'Escaneie o QR Code ou copie o código PIX abaixo:';
-    
+
     document.getElementById('qr-container').style.display = 'block';
     document.getElementById('timer-container').style.display = 'block';
-    
+
     gerarQRCode();
-    
+
     iniciarTimer(600);
-    
+
     setTimeout(() => {
         if (!pixProcessed) {
             pixProcessed = true;
             clearInterval(timerInterval);
             fecharModal('processamento');
-            mostrarSucesso('Pagamento aprovado! Aguarde o pedido em sua residência.');
+            const recebimento = document.querySelector('input[name="recebimento"]:checked').value;
+            const mensagem = recebimento === 'retirada'
+                ? 'Pagamento aprovado! Aguarde o pedido para retirada na loja.'
+                : 'Pagamento aprovado! Aguarde o pedido em sua residência.';
+            mostrarSucesso(mensagem);
         }
     }, 15000);
 }
 
 function processarPagamentoDinheiro() {
-    mostrarSucesso('Pagamento aprovado! Aguarde o pedido em sua residência.<br><strong>Pague ao motoboy na entrega.</strong>');
+    const recebimento = document.querySelector('input[name="recebimento"]:checked').value;
+    const mensagem = recebimento === 'retirada'
+        ? 'Pagamento aprovado! Aguarde o pedido para retirada na loja.<br><strong>Pague na retirada.</strong>'
+        : 'Pagamento aprovado! Aguarde o pedido em sua residência.<br><strong>Pague ao motoboy na entrega.</strong>';
+    mostrarSucesso(mensagem);
 }
 
 function gerarQRCode() {
