@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/checkout.css">
+    <title>Finalizar Pedido - Padaria Paladar Nobre</title>
+</head>
+<body>
+    <div class="checkout-container">
+        <header class="checkout-header">
+            <button class="btn-voltar" onclick="window.location.href='cardapio.html'">
+                ← Voltar ao Carrinho
+            </button>
+            <h1>Finalizar Pedido</h1>
+        </header>
+
+        <div class="checkout-content">
+            <section class="section-dados-pessoais">
+                <h2>Dados Pessoais</h2>
+                <form id="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo *</label>
+                            <input type="text" id="nome" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone *</label>
+                            <input type="tel" id="telefone" name="telefone" required placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00">
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <section class="section-endereco">
+                <h2>Endereço de Entrega</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cep">CEP *</label>
+                        <input type="text" id="cep" name="cep" required placeholder="00000-000">
+                    </div>
+                    <div class="form-group">
+                        <label for="rua">Rua/Avenida *</label>
+                        <input type="text" id="rua" name="rua" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="numero">Número *</label>
+                        <input type="text" id="numero" name="numero" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" id="complemento" name="complemento" placeholder="Apto, Bloco, etc.">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bairro">Bairro *</label>
+                        <input type="text" id="bairro" name="bairro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade *</label>
+                        <input type="text" id="cidade" name="cidade" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="referencia">Ponto de Referência</label>
+                    <input type="text" id="referencia" name="referencia" placeholder="Ex: Próximo ao mercado, em frente à escola...">
+                </div>
+            </section>
+
+            <section class="section-pagamento">
+                <h2>Forma de Pagamento</h2>
+                <div class="payment-options">
+                    <div class="payment-option" data-payment="cartao">
+                        <input type="radio" id="cartao" name="pagamento" value="cartao">
+                        <label for="cartao">
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-text">
+                                <strong>Cartão de Crédito/Débito</strong>
+                                <span>Visa, Mastercard, Elo</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="payment-option" data-payment="pix">
+                        <input type="radio" id="pix" name="pagamento" value="pix">
+                        <label for="pix">
+                            <div class="payment-icon">📱</div>
+                            <div class="payment-text">
+                                <strong>PIX</strong>
+                                <span>Pagamento instantâneo</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="payment-option" data-payment="dinheiro">
+                        <input type="radio" id="dinheiro" name="pagamento" value="dinheiro">
+                        <label for="dinheiro">
+                            <div class="payment-icon">💰</div>
+                            <div class="payment-text">
+                                <strong>Dinheiro</strong>
+                                <span>Pagamento na entrega</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="cartao-form" class="payment-form" style="display: none;">
+                    <h3>Dados do Cartão</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="numero-cartao">Número do Cartão *</label>
+                            <input type="text" id="numero-cartao" name="numero-cartao" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <label for="nome-cartao">Nome no Cartão *</label>
+                            <input type="text" id="nome-cartao" name="nome-cartao" placeholder="Como está no cartão">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="validade">Validade *</label>
+                            <input type="text" id="validade" name="validade" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV *</label>
+                            <input type="text" id="cvv" name="cvv" placeholder="000" maxlength="4">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" name="tipo-cartao" value="credito" checked> Crédito
+                        </label>
+                        <label>
+                            <input type="radio" name="tipo-cartao" value="debito"> Débito
+                        </label>
+                    </div>
+                </div>
+
+                <div id="dinheiro-form" class="payment-form" style="display: none;">
+                    <h3>Pagamento em Dinheiro</h3>
+                    <div class="form-group">
+                        <label for="troco">Precisa de troco para quanto?</label>
+                        <input type="number" id="troco" name="troco" placeholder="Ex: 50.00" step="0.01">
+                        <small>Deixe em branco se não precisar de troco</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-resumo">
+                <h2>Resumo do Pedido</h2>
+                <div id="resumo-itens">
+                </div>
+                <div class="resumo-total">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Taxa de entrega:</span>
+                        <span id="taxa-entrega">R$ 5,00</span>
+                    </div>
+                    <div class="total-line total-final">
+                        <span><strong>Total:</strong></span>
+                        <span id="total-final"><strong>R$ 0,00</strong></span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="finalizar-container">
+                <button id="btn-finalizar" class="btn-finalizar" disabled>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-processamento" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <h3 id="modal-title">Processando pagamento...</h3>
+            <p id="modal-message">Aguarde enquanto processamos seu pagamento.</p>
+            <div id="timer-container" style="display: none;">
+                <div class="timer">
+                    <span id="timer-display">10:00</span>
+                </div>
+            </div>
+            <div id="qr-container" style="display: none;">
+                <div class="qr-code">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+                <div class="pix-code">
+                    <p>Código PIX:</p>
+                    <div class="pix-code-text" id="pix-code-text">
+                        00020126580014BR.GOV.BCB.PIX0136123e4567-e12b-12d1-a456-426614174000520400005303986540525.005802BR5925PADARIA PALADAR NOBRE6009SAO PAULO62070503***6304ABCD
+                    </div>
+                    <button id="btn-copiar-pix" class="btn-copiar">Copiar Código</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-sucesso" class="modal" style="display: none;">
+        <div class="modal-content success">
+            <div class="success-icon">✅</div>
+            <h3>Pagamento Aprovado!</h3>
+            <p id="success-message">Aguarde o pedido em sua residência</p>
+            <div class="success-details">
+                <p><strong>Tempo estimado:</strong> 10-20 minutos</p>
+                <p><strong>Pedido #:</strong> <span id="numero-pedido">12345</span></p>
+            </div>
+            <button id="btn-novo-pedido" class="btn-novo-pedido">Fazer Novo Pedido</button>
+        </div>
+    </div>
+
+    <script src="../scripts/checkout.js"></script>
+</body>
+</html>

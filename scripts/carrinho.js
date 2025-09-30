@@ -90,7 +90,10 @@ function adicionarAoCarrinho(produto) {
 }
 
 function finalizarPedido() {
-  alert("Pedido finalizado com sucesso!");
-  localStorage.removeItem("carrinho");
-  fecharCarrinho();
+  try {
+    console.log("Navegando para checkout");
+    window.location.href = "checkout.html";
+  } catch (error) {
+    console.error("Erro ao finalizar pedido:", error);
+  }
 }
