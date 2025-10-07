@@ -12,6 +12,133 @@
     --t1: rgba(0, 0, 0, 0.7);
     --t2: rgba(255, 255, 255, 0.7);
 }
+
+
+/* Remove o sublinhado padrão do link do menu */
+nav ul li.user-menu a::after {
+    display: none;
+}
+
+/* Estilo para a mensagem de boas-vindas */
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--main-color) !important; /* Cor de destaque */
+    font-weight: bold;
+}
+
+.user-welcome .fa-cog {
+    transition: transform 0.3s ease;
+}
+
+/* Container do menu dropdown */
+.user-menu {
+    position: relative;
+}
+
+/* O menu dropdown em si (escondido por padrão) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    list-style: none;
+    padding: 10px 0 !important;
+    margin-top: 10px;
+    min-width: 160px;
+    z-index: 1000;
+    flex-direction: column; /* Garante que os itens fiquem um abaixo do outro */
+}
+
+/* Remove o sublinhado padrão do link do menu */
+nav ul li.user-menu a::after {
+    display: none;
+}
+
+/* Estilo para a mensagem de boas-vindas */
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--main-color) !important; /* Cor de destaque */
+    font-weight: bold;
+}
+
+.user-welcome .fa-cog {
+    transition: transform 0.3s ease;
+}
+
+/* Container do menu dropdown */
+.user-menu {
+    position: relative;
+}
+
+/* O menu dropdown em si (escondido por padrão) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    list-style: none;
+    padding: 10px 0 !important;
+    /* CORREÇÃO CRÍTICA: Removemos a margem que criava o espaço */
+    margin-top: 0; 
+    min-width: 160px;
+    z-index: 1000;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra para dar profundidade */
+}
+
+/* Mostra o dropdown quando o mouse está sobre o menu do usuário */
+.user-menu:hover .dropdown-menu {
+    display: flex;
+}
+
+/* Gira a engrenagem quando o menu está aberto */
+.user-menu:hover .user-welcome .fa-cog {
+    transform: rotate(90deg);
+}
+
+/* Estilo dos itens do dropdown */
+.dropdown-menu li {
+    margin: 0 !important;
+    width: 100%;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #D5CBA4 !important;
+    font-size: 15px !important;
+    white-space: nowrap;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--main-color);
+    color: var(--black) !important;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #D5CBA4 !important;
+    font-size: 15px !important;
+    white-space: nowrap;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--main-color);
+    color: var(--black) !important;
+}
+
+
 .header--menu {
     display: flex;
     align-items: center;

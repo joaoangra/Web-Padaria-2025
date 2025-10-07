@@ -9,12 +9,10 @@ function atualizarCarrinhoUI() {
     const container = document.getElementById("carrinho-itens");
     const footer = document.querySelector('.carrinho-footer');
     const totalDiv = document.getElementById("carrinho-total");
-    // CORREÇÃO: Seletor para o contador em inglês
     const contadorCarrinho = document.querySelector('.cart-contador');
 
     if (!container || !footer || !totalDiv) return;
 
-    // ATUALIZA O CONTADOR NO HEADER
     if (contadorCarrinho) {
         const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
         contadorCarrinho.textContent = totalItens;
@@ -98,15 +96,27 @@ function removerItem(produto_id) {
 }
 
 function finalizarPedido() {
+    // 1. Verifica se existe um token de autenticação salvo
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        // Se NÃO houver token, exibe o alerta e redireciona para o login
+        alert("Você precisa estar logado para finalizar a compra.");
+        window.location.href = "/web/cadastro.html"; // Leva para a página de login
+        return; // Para a execução da função aqui
+    }
+
+    // 2. Verifica se o carrinho não está vazio
     if (carrinho.length === 0) {
         alert("Seu carrinho está vazio.");
         return;
     }
+
+    // 3. Se tudo estiver certo (logado e com itens), vai para o checkout
     window.location.href = "/web/checkout.html";
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // CORREÇÃO: O botão agora tem a classe 'cart-button'
     const cartButtonHeader = document.querySelector('.cart-button');
     if (cartButtonHeader) cartButtonHeader.addEventListener('click', abrirCarrinho);
 
