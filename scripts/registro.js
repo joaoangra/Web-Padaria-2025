@@ -5,10 +5,12 @@ form.addEventListener("submit", async (e) => {
 
     const nome = document.getElementById("nome")?.value.trim();
     const email = document.getElementById("email")?.value.trim();
+    const telefone = document.getElementById("telefone")?.value.trim(); 
+    const endereco = document.getElementById("endereco")?.value.trim(); 
     const senha = document.getElementById("senha")?.value;
     const confirmSenha = document.getElementById("confirmSenha")?.value;
 
-    if (!nome || !email || !senha || !confirmSenha) {
+    if (!nome || !email || !senha || !confirmSenha || !telefone || !endereco) {
         alert("Por favor, preencha todos os campos!");
         return;
     }
@@ -21,9 +23,9 @@ form.addEventListener("submit", async (e) => {
     const bodyData = {
         nome,
         email,
-        senha,
-        telefone: "",
-        endereco:""
+        telefone,
+        endereco,
+        senha
     };
 
     try {
