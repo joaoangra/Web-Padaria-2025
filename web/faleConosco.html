@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
     <link rel="stylesheet" href="../styles/faleConosco.css">
-    <title>Fale Conos Padaria</title>
+    <title>Fale Conosco Padaria</title>
 </head>
 <body>
     <header>
@@ -22,31 +22,35 @@
         </nav>
     </header>
 
-<section class="contact" id="contact">
+    <section class="contact" id="contact">
+        <h1 class="heading"> <span>CONTATE -</span> nos </h1>
+        <div class="row">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.677484615104!2d-46.995495423873464!3d-22.703046979399062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8e844aa89e78b%3A0x2081034474f4726a!2sEscola%20SENAI%20Jaguari%C3%BAna!5e0!3m2!1spt-BR!2sbr!4v1730203179581!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            
+            <!-- MUDANÇA: Adicionado id, action e method -->
+            <form id="form-contato" action="https://formspree.io/forms/mqaydkvd/integration" method="POST">
+                <h3>Fale Conosco</h3>
+                <div class="inputBox">
+                    <span class="fas fa-user"></span>
+                    <!-- MUDANÇA: Adicionado o atributo name="nome" -->
+                    <input type="text" name="nome" placeholder="Nome" required>
+                </div>
+                <div class="inputBox">
+                    <span class="fas fa-envelope"></span>
+                    <!-- MUDANÇA: Adicionado o atributo name="email" -->
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="inputBox">
+                    <span class="fas fa-phone"></span>
+                    <!-- MUDANÇA: Adicionado o atributo name="mensagem" e corrigido o tipo do campo -->
+                    <textarea name="mensagem" placeholder="Escreva sua mensagem" required></textarea>
+                </div>
+                <input type="submit" value="Enviar" class="btn">
+            </form>
+        </div>
+    </section>
 
-    <h1 class="heading"> <span>CONTATE -</span> nos </h1>
-
-    <div class="row">
-
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.677484615104!2d-46.995495423873464!3d-22.703046979399062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8e844aa89e78b%3A0x2081034474f4726a!2sEscola%20SENAI%20Jaguari%C3%BAna!5e0!3m2!1spt-BR!2sbr!4v1730203179581!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <form action="">
-            <h3>Fale Conosco</h3>
-            <div class="inputBox">
-                <span class="fas fa-user"></span>
-                <input type="text" placeholder="Nome">
-            </div>
-            <div class="inputBox">
-                <span class="fas fa-envelope"></span>
-                <input type="email" placeholder="Email">
-            </div>
-            <div class="inputBox">
-                <span class="fas fa-phone"></span>
-                <input type="Text" placeholder="Escreva sua mensagem">
-            </div>
-            <input type="submit" value="Enviar" class="btn">
-        </form>
-
-    </div>
-
+    <!-- MUDANÇA: Adicionado o link para o arquivo JavaScript antes de fechar o body -->
+    <script src="../scripts/faleConosco.js"></script>
 </body>
 </html>
