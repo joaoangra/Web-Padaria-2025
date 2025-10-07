@@ -27,7 +27,7 @@ form.addEventListener("submit", async (e) => {
     };
 
     try {
-        const res = await fetch("https://api-padaria-seven.vercel.app//clientes", {
+        const res = await fetch("https://api-padaria-seven.vercel.app/clientes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(bodyData)
