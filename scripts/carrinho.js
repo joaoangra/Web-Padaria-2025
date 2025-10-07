@@ -25,10 +25,7 @@ function atualizarCarrinhoUI() {
         total += subtotal;
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("item-carrinho");
-        
-        // ========================================================================
-        // CORREÇÃO APLICADA APENAS NOS BOTÕES DE QUANTIDADE
-        // ========================================================================
+      
         itemDiv.innerHTML = `
             <img src="${produto.imagem}" alt="${produto.nome}">
             <div class="item-info">
