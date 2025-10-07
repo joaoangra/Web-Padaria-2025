@@ -1,0 +1,112 @@
+/* Estilos para a página de perfil e opções */
+
+/* Container principal da página de perfil */
+.perfil-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--black);
+    border-radius: 15px;
+    border: 1px solid var(--border);
+}
+
+/* Navegação por Abas */
+.perfil-nav {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.perfil-nav-item {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #ccc;
+    border-bottom: 3px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.perfil-nav-item:hover {
+    color: #fff;
+}
+
+.perfil-nav-item.active {
+    color: var(--main-color);
+    border-bottom-color: var(--main-color);
+}
+
+/* Conteúdo das Abas */
+.perfil-content {
+    display: none; /* Escondido por padrão */
+}
+
+.perfil-content.active {
+    display: block; /* Mostra apenas o conteúdo da aba ativa */
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Estilos para os botões de ação */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-perfil {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-editar {
+    background-color: var(--main-color);
+    color: var(--black);
+}
+
+.btn-salvar {
+    background-color: #28a745; /* Verde para salvar */
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #6c757d; /* Cinza para cancelar */
+    color: white;
+}
+
+/* Estilo para inputs quando estão editáveis */
+input:not([readonly]) {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--main-color) !important;
+}
+
+/* Estilo para a seção de exclusão de conta */
+.danger-zone {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #5c2c2c;
+}
+
+.danger-zone h3 {
+    color: #ff5555;
+    margin-bottom: 0.5rem;
+}
+
+.danger-zone p {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.btn-excluir {
+    background-color: #dc3545;
+    color: white;
+}

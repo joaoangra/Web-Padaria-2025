@@ -6,72 +6,88 @@
     <title>Meu Perfil - Padaria Paladar Nobre</title>
     <link rel="shortcut icon" href="/docs/Imagem/download2.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Reutilizando estilos para manter a consistência visual -->
     <link rel="stylesheet" href="/styles/cardapio.css"> 
     <link rel="stylesheet" href="/styles/checkout.css"> 
+    <link rel="stylesheet" href="/styles/perfil.css">
 </head>
 <body>
     <header class="header">
-        <!-- O auth.js vai preencher o menu dinamicamente aqui -->
         <div class="logo"><img src="/docs/logoPN.png" alt="Logo"></div>
         <nav>
             <ul>
                 <li><a href="/web/Home.html">A Padaria</a></li>
                 <li><a href="/web/cardapio.html">Nosso Cardápio</a></li>
-                <!-- Este link será substituído pelo menu do usuário -->
                 <li><a href="/web/cadastro.html">Cadastro & Login</a></li>
             </ul>
         </nav>
     </header>
 
-<div class="checkout-container">
-    <h1 class="heading">Perfil & <span>Opções</span></h1>
+    <div class="perfil-container">
+        <nav class="perfil-nav">
+            <div class="perfil-nav-item active" data-tab="dados">Meus Dados</div>
+            <div class="perfil-nav-item" data-tab="seguranca">Segurança</div>
+        </nav>
 
-    <section class="section-dados-pessoais" id="profile">
+        <div id="tab-dados" class="perfil-content active">
+            <section class="section-dados-pessoais">
+                <h2>Informações Pessoais</h2>
+                <form id="perfil-form">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" readonly placeholder="Carregando...">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail (não pode ser alterado )</label>
+                        <input type="email" id="email" name="email" readonly placeholder="Carregando...">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" readonly placeholder="Carregando...">
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" id="endereco" name="endereco" readonly placeholder="Carregando...">
+                    </div>
+                    <div class="action-buttons">
+                        <button type="button" id="edit-button" class="btn-perfil btn-editar">Editar Dados</button>
+                        <button type="submit" id="save-button" class="btn-perfil btn-salvar" style="display: none;">Salvar Alterações</button>
+                        <button type="button" id="cancel-button" class="btn-perfil btn-cancelar" style="display: none;">Cancelar</button>
+                    </div>
+                </form>
+            </section>
+        </div>
 
-            <h2>Meus Dados</h2>
-            <form id="perfil-form">
-                <div class="form-group">
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" name="nome" readonly placeholder="Carregando...">
-                </div>
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" readonly placeholder="Carregando...">
-                </div>
-                <div class="form-group">
-                    <label for="telefone">Telefone</label>
-                    <input type="tel" id="telefone" name="telefone" readonly placeholder="Carregando...">
-                </div>
-                <div class="form-group">
-                    <label for="endereco">Endereço</label>
-                    <input type="text" id="endereco" name="endereco" readonly placeholder="Carregando...">
-                </div>
-                <!-- Botões para futuras edições -->
-                <!-- <button type="button" id="edit-button" class="btn">Editar Dados</button> -->
-            </form>
-        </section>
 
-        <!-- Seção de Opções Adicionais -->
-        <section class="section-dados-pessoais">
-            <h2>Opções</h2>
-            <div class="form-group">
-                <label>Tema do Site (Funcionalidade em breve! )</label>
-                <div class="theme-options">
-                    <label><input type="radio" name="theme" value="claro" disabled> Claro</label>
-                    <label><input type="radio" name="theme" value="escuro" checked disabled> Escuro (Padrão)</label>
+        <div id="tab-seguranca" class="perfil-content">
+            <section class="section-dados-pessoais">
+                <h2>Alterar Senha</h2>
+                <p style="color: #ccc; font-size: 1rem;">(Funcionalidade em breve!)</p>
+                <form id="senha-form">
+                    <div class="form-group">
+                        <label for="senha-atual">Senha Atual</label>
+                        <input type="password" id="senha-atual" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="nova-senha">Nova Senha</label>
+                        <input type="password" id="nova-senha" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirma-senha">Confirmar Nova Senha</label>
+                        <input type="password" id="confirma-senha" disabled>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn-perfil btn-salvar" disabled>Alterar Senha</button>
+                    </div>
+                </form>
+                <div class="danger-zone">
+                    <h3>Zona de Perigo</h3>
+                    <p>Excluir sua conta é uma ação permanente e não pode ser desfeita.</p>
+                    <button type="button" class="btn-perfil btn-excluir" disabled>Excluir Minha Conta</button>
                 </div>
-            </div>
-             <div class="form-group">
-                <label>Notificações (Funcionalidade em breve!)</label>
-                <div class="theme-options">
-                    <label><input type="checkbox" name="notifications" checked disabled> Receber ofertas por e-mail</label>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 
-    <!-- Scripts Essenciais -->
     <script src="/scripts/auth.js"></script>
     <script src="/scripts/perfil.js"></script>
 </body>
