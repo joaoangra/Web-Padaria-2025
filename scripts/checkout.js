@@ -189,7 +189,7 @@ async function finalizarPedido() {
     const token = localStorage.getItem('token');
     if (!token) {
         alert("Você precisa estar logado para finalizar o pedido.");
-        window.location.href = "/web/login.html";
+        window.location.href = "/web/registro.html";
         return;
     }
 
