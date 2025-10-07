@@ -184,97 +184,19 @@ function validarFormulario() {
     document.getElementById('btn-finalizar').disabled = !isValid;
 }
 
-async function finalizarPedido() {
-    
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert("Você precisa estar logado para finalizar o pedido.");
-        window.location.href = "/web/registro.html";
-        return;
-    }
+function finalizarPedido() {
+    const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
 
-    const dadosCliente = {
-        nome: document.getElementById('nome').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        cpf: document.getElementById('cpf').value.trim()
-    };
-
-    const dadosEntrega = {
-        tipo: document.querySelector('input[name="recebimento"]:checked').value,
-        cep: document.getElementById('cep').value.trim(),
-        rua: document.getElementById('rua').value.trim(),
-        numero: document.getElementById('numero').value.trim(),
-        complemento: document.getElementById('complemento').value.trim(),
-        bairro: document.getElementById('bairro').value.trim(),
-        cidade: document.getElementById('cidade').value.trim()
-    };
-
-    const dadosPagamento = {
-        forma: document.querySelector('input[name="pagamento"]:checked').value
-    
-    };
-
-    const itensPedido = carrinho.map(item => ({
-        produto_id: item.produto_id,
-        quantidade: item.quantidade,
-        preco_unitario: item.preco
-    }));
-
-    const corpoRequisicao = {
-        itens: itensPedido,
-        dadosCliente,
-        dadosEntrega,
-        dadosPagamento
-    };
-
-    document.getElementById('btn-finalizar').disabled = true;
-    document.getElementById('btn-finalizar').textContent = 'Processando...';
-
-    try {
-        const response = await fetch('https://api-padaria-seven.vercel.app/api/pedidos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
-            },
-            body: JSON.stringify(corpoRequisicao )
-        });
-
-        const resultado = await response.json();
-
-        if (response.ok) {
-            localStorage.removeItem('carrinho');
-
-            const mensagemSucesso = dadosEntrega.tipo === 'retirada'
-                ? 'Pedido confirmado! Aguarde a confirmação para retirada na loja.'
-                : 'Pedido confirmado! Em breve ele sairá para entrega.';
-            
-            mostrarSucesso(mensagemSucesso, resultado.pedido_id);
-
-        } else {
-       
-            alert(`Erro ao finalizar o pedido: ${resultado.error}`);
-            document.getElementById('btn-finalizar').disabled = false;
-            document.getElementById('btn-finalizar').textContent = 'Finalizar Pedido';
-        }
-
-    } catch (error) {
-        console.error("Erro de rede ao finalizar pedido:", error);
-        alert("Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");
-        document.getElementById('btn-finalizar').disabled = false;
-        document.getElementById('btn-finalizar').textContent = 'Finalizar Pedido';
-    }
-}
-
+    // Clear the cart in localStorage
     localStorage.removeItem('carrinho');
 
+    // Update UI or any cart display if needed
     if (typeof mostrarCarrinhoSidebar === 'function') {
         mostrarCarrinhoSidebar();
     }
 
     processarPagamento(formaPagamento);
-
+}
 
 function processarPagamento(formaPagamento) {
     switch (formaPagamento) {
@@ -437,12 +359,11 @@ function fecharModal(tipo) {
     document.body.style.overflow = 'auto';
 }
 
-function mostrarSucesso(mensagem, numeroPedido) {
+function mostrarSucesso(mensagem) {
     document.getElementById('success-message').innerHTML = mensagem;
-    document.getElementById('numero-pedido').textContent = numeroPedido || (Math.floor(Math.random() * 90000) + 10000);
+    document.getElementById('numero-pedido').textContent = Math.floor(Math.random() * 90000) + 10000;
     mostrarModal('sucesso');
 }
-
 
 document.getElementById('cep').addEventListener('blur', function() {
     const cep = this.value.replace(/\D/g, '');
