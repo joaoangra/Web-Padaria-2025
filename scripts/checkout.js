@@ -184,98 +184,18 @@ function validarFormulario() {
     document.getElementById('btn-finalizar').disabled = !isValid;
 }
 
-async function finalizarPedido() {
-    // 1. VERIFICAR LOGIN (ESSENCIAL)
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert("Você precisa estar logado para finalizar o pedido.");
-        window.location.href = "/web/cadastro.html";
-        return;
+function finalizarPedido() {
+    const formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
+
+    // Clear the cart in localStorage
+    localStorage.removeItem('carrinho');
+
+    // Update UI or any cart display if needed
+    if (typeof mostrarCarrinhoSidebar === 'function') {
+        mostrarCarrinhoSidebar();
     }
 
-    // 2. COLETAR DADOS DO FORMULÁRIO E DO CARRINHO
-    const dadosCliente = {
-        nome: document.getElementById('nome').value.trim(),
-        telefone: document.getElementById('telefone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        cpf: document.getElementById('cpf').value.trim()
-    };
-
-    const dadosEntrega = {
-        tipo: document.querySelector('input[name="recebimento"]:checked').value,
-        cep: document.getElementById('cep').value.trim(),
-        rua: document.getElementById('rua').value.trim(),
-        numero: document.getElementById('numero').value.trim(),
-        complemento: document.getElementById('complemento').value.trim(),
-        bairro: document.getElementById('bairro').value.trim(),
-        cidade: document.getElementById('cidade').value.trim()
-    };
-
-    const dadosPagamento = {
-        forma: document.querySelector('input[name="pagamento"]:checked').value
-        // Não envie dados de cartão de crédito para sua API a menos que você
-        // tenha certificação PCI. A simulação atual é segura.
-    };
-
-    // Prepara os itens do pedido no formato que a API espera
-    const itensPedido = carrinho.map(item => ({
-        produto_id: item.produto_id,
-        quantidade: item.quantidade,
-        preco_unitario: item.preco
-    }));
-
-    // 3. MONTAR O CORPO DA REQUISIÇÃO PARA A API
-    const corpoRequisicao = {
-        itens: itensPedido,
-        dadosCliente,
-        dadosEntrega,
-        dadosPagamento
-    };
-
-    // Desativa o botão para evitar cliques duplos
-    document.getElementById('btn-finalizar').disabled = true;
-    document.getElementById('btn-finalizar').textContent = 'Processando...';
-
-    // 4. ENVIAR OS DADOS PARA A API
-    try {
-        const response = await fetch('https://api-padaria-seven.vercel.app/api/pedidos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Autenticação
-            },
-            body: JSON.stringify(corpoRequisicao )
-        });
-
-        const resultado = await response.json();
-
-        if (response.ok) {
-            // SUCESSO! O pedido foi criado no banco de dados.
-            localStorage.removeItem('carrinho'); // Limpa o carrinho local
-            
-            // Agora, podemos chamar a função que mostra a tela de sucesso
-            // passando o número do pedido real retornado pela API.
-            const mensagemSucesso = dadosEntrega.tipo === 'retirada'
-                ? 'Pedido confirmado! Aguarde a confirmação para retirada na loja.'
-                : 'Pedido confirmado! Em breve ele sairá para entrega.';
-            
-            mostrarSucesso(mensagemSucesso, resultado.pedido_id); // Passa o ID do pedido real
-
-        } else {
-            // ERRO! A API retornou um problema (ex: falta de estoque).
-            alert(`Erro ao finalizar o pedido: ${resultado.error}`);
-            // Reativa o botão em caso de erro
-            document.getElementById('btn-finalizar').disabled = false;
-            document.getElementById('btn-finalizar').textContent = 'Finalizar Pedido';
-        }
-
-    } catch (error) {
-        console.error("Erro de rede ao finalizar pedido:", error);
-        alert("Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.");
-        // Reativa o botão em caso de erro de rede
-        document.getElementById('btn-finalizar').disabled = false;
-        document.getElementById('btn-finalizar').textContent = 'Finalizar Pedido';
-    }
+    processarPagamento(formaPagamento);
 }
 
 function processarPagamento(formaPagamento) {
@@ -439,11 +359,9 @@ function fecharModal(tipo) {
     document.body.style.overflow = 'auto';
 }
 
-
-function mostrarSucesso(mensagem, numeroPedido) { // Adiciona o parâmetro numeroPedido
+function mostrarSucesso(mensagem) {
     document.getElementById('success-message').innerHTML = mensagem;
-    // Usa o número do pedido vindo da API em vez de um aleatório
-    document.getElementById('numero-pedido').textContent = numeroPedido || (Math.floor(Math.random() * 90000) + 10000);
+    document.getElementById('numero-pedido').textContent = Math.floor(Math.random() * 90000) + 10000;
     mostrarModal('sucesso');
 }
 
