@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>Cardápio Cantina</title>
-   <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="../styles/cardapio.css">
+  <link rel="shortcut icon" href="/docs/Imagem/download2.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/styles/cardapio.css">
 </head>
 <body>
+  <!-- ... (todo o seu header, section, etc. continua igual ) ... -->
   <header class="header">
-        <div class="logo">
-            <img src="../docs/logoPN.png" alt="Logo">
+    <div class="logo">
+        <img src="/docs/logoPN.png" alt="Logo">
+    </div>
+    <nav>
+        <div class="header--menu">
+            <div class="search--box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Pesquisar">
+            </div>
+            <div class="menu--icons">
+               <button class="cart-button" aria-label="Abrir carrinho de compras">
+                   <img src="/docs/carrinho-de-compras.png" alt="Carrinho">
+               </button>
+            </div>
         </div>
-        <nav>
-            <nav class="header--menu">
-                <div class="search--box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Pesquisar">
-                </div>
-                <div class="menu--icons">
-                <i><img src="../docs/carrinho-de-compras.png" alt="Confete" class="fa-solid fa-cart-shopping"></i>
-                   </div>
-                </div>
-            </nav>
-            <ul>
-                <li><a href="cardapio.html">Nosso Cardápio</a></li>
-                <li><a href="Home.html">A Padaria</a></li>
-                <li><a href="faleConosco.html">Fale Conosco</a></li>
-                <li><a href="cadastro.html">Cadastro & Login</a></li>
-            </ul>
-        </nav>
-    </header>
+        <ul>
+            <li><a href="/web/Home.html">A Padaria</a></li>
+            <li><a href="/web/faleConosco.html">Fale Conosco</a></li>
+            <li><a href="/web/cadastro.html">Cadastro & Login</a></li>
+        </ul>
+    </nav>
+  </header>
 
   <section class="products" id="products">
     <h1 class="heading">Nosso <span>CARDÁPIO</span></h1>
@@ -45,20 +45,24 @@
       <h2 id="modal-nome"></h2>
       <p id="modal-desc"></p>
       <p id="modal-preco"></p>
-      <p id="modal-avaliacao"></p>
     </div>
   </div>
 
-<div id="carrinhoSidebar" class="sidebar-carrinho">
-  <button class="fechar-btn" onclick="fecharCarrinho()">×</button>
-  <h2>Seu Carrinho</h2>
-  <div id="carrinho-itens"></div>
-  <div id="carrinho-total"></div>
- <button class="finalizar" onclick="finalizarPedido()">Finalizar Pedido</button>
-</div>
+  <div id="carrinhoSidebar" class="sidebar-carrinho">
+    <header>
+      <h2>Seu Carrinho</h2>
+      <button class="fechar-btn">×</button>
+    </header>
+    <div id="carrinho-itens"></div>
+    <footer class="carrinho-footer">
+      <div id="carrinho-total"></div>
+      <button class="finalizar">Finalizar Pedido</button>
+    </footer>
+  </div>
 
+  <!-- CORREÇÃO CRÍTICA: A ORDEM DOS SCRIPTS FOI INVERTIDA -->
+  <script src="/scripts/carrinho.js"></script>
+  <script src="/scripts/cardapio.js"></script>
 
-  <script src="../scripts/cardapio.js"></script>
-  <script src="../scripts/carrinho.js"></script>
 </body>
 </html>
