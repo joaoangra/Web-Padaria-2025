@@ -1,42 +1,42 @@
-// Em /scripts/faleConosco.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Seleciona o formulário pelo ID que vamos adicionar no HTML
+
     const form = document.getElementById('form-contato');
 
     form.addEventListener('submit', async (evento) => {
-        evento.preventDefault(); // Impede o comportamento padrão de recarregar a página
+        evento.preventDefault();
 
         const submitButton = form.querySelector('input[type="submit"]');
-        const statusMessage = document.createElement('p'); // Cria um elemento para mensagens
+        const statusMessage = document.createElement('p');
         statusMessage.className = 'status-message';
         form.appendChild(statusMessage);
 
-        // Pega os dados do formulário
         const formData = new FormData(form);
-        
-        // Feedback visual para o usuário
+
         submitButton.value = 'Enviando...';
         submitButton.disabled = true;
         statusMessage.textContent = '';
 
         try {
-            // Envia os dados para o endpoint do Formspree
+            // Converte os dados do formulário para um objeto simples
+            const formData = new FormData(form);
+            const dataObject = Object.fromEntries(formData.entries());
+
+            // Envia os dados para o endpoint do Formspree como JSON
             const response = await fetch(form.action, {
                 method: form.method,
-                body: formData,
+                body: JSON.stringify(dataObject), // CORREÇÃO: Envia como JSON
                 headers: {
+                    'Content-Type': 'application/json', // CORREÇÃO: Informa que o corpo é JSON
                     'Accept': 'application/json'
                 }
             });
 
-            // Processa a resposta
+            // Processa a resposta (o resto do código continua igual)
             if (response.ok) {
                 statusMessage.textContent = 'Mensagem enviada com sucesso! Obrigado.';
                 statusMessage.style.color = 'green';
-                form.reset(); // Limpa os campos do formulário
+                form.reset();
             } else {
-                // Tenta pegar uma mensagem de erro mais específica do Formspree
                 const data = await response.json();
                 if (Object.hasOwn(data, 'errors')) {
                     statusMessage.textContent = data["errors"].map(error => error["message"]).join(", ");
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 statusMessage.remove();
             }, 6000);
+
         }
-    });
+    })
 });
