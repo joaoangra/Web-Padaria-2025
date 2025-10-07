@@ -17,21 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
         statusMessage.textContent = '';
 
         try {
-            // Converte os dados do formulário para um objeto simples
+
             const formData = new FormData(form);
             const dataObject = Object.fromEntries(formData.entries());
 
-            // Envia os dados para o endpoint do Formspree como JSON
             const response = await fetch(form.action, {
                 method: form.method,
-                body: JSON.stringify(dataObject), // CORREÇÃO: Envia como JSON
+                body: JSON.stringify(dataObject), 
                 headers: {
-                    'Content-Type': 'application/json', // CORREÇÃO: Informa que o corpo é JSON
+                    'Content-Type': 'application/json', 
                     'Accept': 'application/json'
                 }
             });
 
-            // Processa a resposta (o resto do código continua igual)
             if (response.ok) {
                 statusMessage.textContent = 'Mensagem enviada com sucesso! Obrigado.';
                 statusMessage.style.color = 'green';
@@ -49,11 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
             statusMessage.textContent = 'Falha na conexão. Verifique sua internet e tente novamente.';
             statusMessage.style.color = 'red';
         } finally {
-            // Restaura o botão
+
             submitButton.value = 'Enviar';
             submitButton.disabled = false;
 
-            // Remove a mensagem de status após alguns segundos
             setTimeout(() => {
                 statusMessage.remove();
             }, 6000);
