@@ -140,6 +140,54 @@ body {
     padding: 0; /* Removido padding lateral completamente */
 }
 
+
+.cart-button {
+  background-color: var(--main-color);
+  border: none;
+  border-radius: 50%; /* Deixa o botão redondo */
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative; /* Necessário para posicionar o contador */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(217, 147, 61, 0.4);
+}
+
+.cart-button img {
+  width: 35px; /* Ajusta o tamanho da imagem dentro do botão */
+  height: 35px;
+}
+
+/* Estilo para o contador de itens */
+.cart-contador {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4d4d; /* Vermelho para chamar atenção */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--black);
+  transition: transform 0.2s ease;
+}
+
+/* Esconde o contador quando ele for 0 */
+.cart-contador.hidden {
+    display: none;
+}
 .logo img {
     height: 50px;
     margin-right: 10px;
@@ -294,13 +342,14 @@ nav ul li:hover a::after {
 }
 
 .sidebar-carrinho .fechar-btn {
+  width: 40px;
   position: absolute;
-  top: 15px;
+  top: 17px;
   right: 15px;
   background: transparent;
   border: none;
   color: #fff;
-  font-size: 2rem;
+  font-size: 3.5rem;
   cursor: pointer;
   transition: transform 0.3s, color 0.3s;
 }
@@ -366,12 +415,12 @@ nav ul li:hover a::after {
 
 .quantidade-controls button {
   background-color: var(--main-color);
-  color: var(--black);
+  color: var(--bg);
   border: none;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;

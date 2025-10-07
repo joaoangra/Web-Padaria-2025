@@ -9,7 +9,17 @@ function atualizarCarrinhoUI() {
     const container = document.getElementById("carrinho-itens");
     const footer = document.querySelector('.carrinho-footer');
     const totalDiv = document.getElementById("carrinho-total");
+    // CORREÇÃO: Seletor para o contador em inglês
+    const contadorCarrinho = document.querySelector('.cart-contador');
+
     if (!container || !footer || !totalDiv) return;
+
+    // ATUALIZA O CONTADOR NO HEADER
+    if (contadorCarrinho) {
+        const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+        contadorCarrinho.textContent = totalItens;
+        contadorCarrinho.classList.toggle('hidden', totalItens === 0);
+    }
 
     container.innerHTML = "";
     if (carrinho.length === 0) {
@@ -25,10 +35,6 @@ function atualizarCarrinhoUI() {
         total += subtotal;
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("item-carrinho");
-        
-        // ========================================================================
-        // CORREÇÃO APLICADA APENAS NOS BOTÕES DE QUANTIDADE
-        // ========================================================================
         itemDiv.innerHTML = `
             <img src="${produto.imagem}" alt="${produto.nome}">
             <div class="item-info">
@@ -43,7 +49,6 @@ function atualizarCarrinhoUI() {
                 <p><em>Subtotal: R$ ${subtotal.toFixed(2)}</em></p>
             </div>
         `;
-        
         container.appendChild(itemDiv);
     });
     totalDiv.innerHTML = `Total: R$ ${total.toFixed(2)}`;
@@ -82,7 +87,6 @@ function alterarQuantidade(produto_id, delta) {
             carrinho = carrinho.filter(i => i.produto_id !== produto_id);
         }
         salvarCarrinho();
-        // A função abaixo redesenha o carrinho inteiro com a nova quantidade
         atualizarCarrinhoUI();
     }
 }
@@ -102,6 +106,10 @@ function finalizarPedido() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // CORREÇÃO: O botão agora tem a classe 'cart-button'
+    const cartButtonHeader = document.querySelector('.cart-button');
+    if (cartButtonHeader) cartButtonHeader.addEventListener('click', abrirCarrinho);
+
     const fecharBtn = document.querySelector('#carrinhoSidebar .fechar-btn');
     if (fecharBtn) fecharBtn.addEventListener('click', fecharCarrinho);
 
