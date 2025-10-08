@@ -10,17 +10,15 @@
 }
 
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important;
     font-weight: bold;
 }
 
@@ -28,12 +26,10 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -47,20 +43,18 @@ nav ul li.user-menu a::after {
     margin-top: 10px;
     min-width: 160px;
     z-index: 1000;
-    flex-direction: column; /* Garante que os itens fiquem um abaixo do outro */
+    flex-direction: column; 
 }
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important; 
     font-weight: bold;
 }
 
@@ -68,12 +62,11 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
+
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -84,25 +77,22 @@ nav ul li.user-menu a::after {
     border-radius: 5px;
     list-style: none;
     padding: 10px 0 !important;
-    /* CORREÇÃO CRÍTICA: Removemos a margem que criava o espaço */
+  
     margin-top: 0; 
     min-width: 160px;
     z-index: 1000;
     flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra para dar profundidade */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
 }
 
-/* Mostra o dropdown quando o mouse está sobre o menu do usuário */
 .user-menu:hover .dropdown-menu {
     display: flex;
 }
 
-/* Gira a engrenagem quando o menu está aberto */
 .user-menu:hover .user-welcome .fa-cog {
     transform: rotate(90deg);
 }
 
-/* Estilo dos itens do dropdown */
 .dropdown-menu li {
     margin: 0 !important;
     width: 100%;
@@ -211,7 +201,6 @@ table{
         align-items: center;
         border-bottom: solid 1px var(--c1);
     }
-    /* === NAVBAR PADRÃO CARDÁPIO === */
     :root {
         --main-color: #d9933d;
         --black: #13131a;
@@ -348,7 +337,6 @@ table{
     }
 }
 
-/* === MODAL DE PAGAMENTO === */
 .modal-pagamento {
     display: none;
     position: fixed;
@@ -448,7 +436,6 @@ button[type="button"]:hover {
     background-color: var(--c4);
 }
 
-/* === MODAL DE APROVAÇÃO === */
 .modal-aprovacao {
     display: none;
     position: fixed;

@@ -16,17 +16,15 @@
 
 
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important; 
     font-weight: bold;
 }
 
@@ -34,12 +32,10 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -53,20 +49,18 @@ nav ul li.user-menu a::after {
     margin-top: 10px;
     min-width: 160px;
     z-index: 1000;
-    flex-direction: column; /* Garante que os itens fiquem um abaixo do outro */
+    flex-direction: column; 
 }
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important; 
     font-weight: bold;
 }
 
@@ -74,12 +68,10 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -90,25 +82,21 @@ nav ul li.user-menu a::after {
     border-radius: 5px;
     list-style: none;
     padding: 10px 0 !important;
-    /* CORREÇÃO CRÍTICA: Removemos a margem que criava o espaço */
     margin-top: 0; 
     min-width: 160px;
     z-index: 1000;
     flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra para dar profundidade */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* Mostra o dropdown quando o mouse está sobre o menu do usuário */
 .user-menu:hover .dropdown-menu {
     display: flex;
 }
 
-/* Gira a engrenagem quando o menu está aberto */
 .user-menu:hover .user-welcome .fa-cog {
     transform: rotate(90deg);
 }
 
-/* Estilo dos itens do dropdown */
 .dropdown-menu li {
     margin: 0 !important;
     width: 100%;
@@ -166,7 +154,7 @@ body{
 }
 
 .menu--icons {
-    margin-left: auto; /* Move o carrinho para a direita */
+    margin-left: auto;
 }
 
 .burguer--icon i{
@@ -254,31 +242,31 @@ header {
     width: 100%;
     gap: 1px;
     background-color: var(--black);
-    padding: 10px 2%; /* Reduzido para 10px */
+    padding: 10px 2%; 
     flex-wrap: wrap;
 }
 
 .menu--icons img {
-    width: 25px; /* Controlando o tamanho do ícone do carrinho */
-    height: auto; /* Mantendo a proporção */
+    width: 25px; 
+    height: auto; 
 }
 
 body {
-    padding: 0; /* Removido padding lateral completamente */
+    padding: 0; 
 }
 
 
 .cart-button {
   background-color: var(--main-color);
   border: none;
-  border-radius: 50%; /* Deixa o botão redondo */
+  border-radius: 50%;
   width: 45px;
   height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative; /* Necessário para posicionar o contador */
+  position: relative; 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -288,16 +276,15 @@ body {
 }
 
 .cart-button img {
-  width: 35px; /* Ajusta o tamanho da imagem dentro do botão */
+  width: 35px;
   height: 35px;
 }
 
-/* Estilo para o contador de itens */
 .cart-contador {
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: #ff4d4d; /* Vermelho para chamar atenção */
+  background-color: #ff4d4d; 
   color: white;
   font-size: 12px;
   font-weight: bold;
@@ -311,7 +298,6 @@ body {
   transition: transform 0.2s ease;
 }
 
-/* Esconde o contador quando ele for 0 */
 .cart-contador.hidden {
     display: none;
 }
@@ -440,9 +426,9 @@ nav ul li:hover a::after {
 .sidebar-carrinho {
   position: fixed;
   top: 0;
-  right: -100%; /* Começa totalmente fora da tela */
+  right: -100%; 
   width: 380px;
-  max-width: 90vw; /* Garante que não ocupe a tela inteira em celulares */
+  max-width: 90vw;
   height: 100%;
   background-color: var(--bg);
   box-shadow: -5px 0 15px rgba(255, 255, 255, 0.397);
@@ -450,11 +436,11 @@ nav ul li:hover a::after {
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--border);
-  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transição suave */
+  transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
 }
 
 .sidebar-carrinho.aberta {
-  right: 0; /* Posição final quando aberto */
+  right: 0; 
 }
 
 .sidebar-carrinho h2 {
@@ -615,7 +601,6 @@ nav ul li:hover a::after {
   transform: translateY(-2px);
 }
 
-/* Estilo para o modal */
 .modal {
     display: none;
     position: fixed;
@@ -720,23 +705,20 @@ nav ul li:hover a::after {
     font-weight: 500;
 }
 
-/* Espaçamento entre as estrelas */
     .stars i {
         margin-right: 1px;
         color: var(--main-color);
     }
 
-    /* Estilo para ícone de coração favoritado */
     .btn-fav.favoritado {
         color: #ff0000 !important;
         background-color: rgba(255, 0, 0, 0.1);
         border-radius: 50%;
     }
 
-    /* Responsividade para espaçamento das estrelas */
     @media (max-width: 768px) {
         .stars i {
-            margin-right: 10px; /* Aumenta o espaçamento entre as estrelas */
+            margin-right: 10px;
         }
     }
 

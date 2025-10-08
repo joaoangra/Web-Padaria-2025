@@ -1,5 +1,3 @@
-/* ====== ESTILO BASE ====== */
-/* === NAVBAR PADRÃO CARDÁPIO === */
 :root {
     --main-color: #d9933d;
     --black: #13131a;
@@ -14,17 +12,15 @@
 }
 
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important; 
     font-weight: bold;
 }
 
@@ -32,12 +28,10 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -51,20 +45,18 @@ nav ul li.user-menu a::after {
     margin-top: 10px;
     min-width: 160px;
     z-index: 1000;
-    flex-direction: column; /* Garante que os itens fiquem um abaixo do outro */
+    flex-direction: column; 
 }
 
-/* Remove o sublinhado padrão do link do menu */
 nav ul li.user-menu a::after {
     display: none;
 }
 
-/* Estilo para a mensagem de boas-vindas */
 .user-welcome {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--main-color) !important; /* Cor de destaque */
+    color: var(--main-color) !important; 
     font-weight: bold;
 }
 
@@ -72,12 +64,10 @@ nav ul li.user-menu a::after {
     transition: transform 0.3s ease;
 }
 
-/* Container do menu dropdown */
 .user-menu {
     position: relative;
 }
 
-/* O menu dropdown em si (escondido por padrão) */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -88,25 +78,21 @@ nav ul li.user-menu a::after {
     border-radius: 5px;
     list-style: none;
     padding: 10px 0 !important;
-    /* CORREÇÃO CRÍTICA: Removemos a margem que criava o espaço */
     margin-top: 0; 
     min-width: 160px;
     z-index: 1000;
     flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Sombra para dar profundidade */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* Mostra o dropdown quando o mouse está sobre o menu do usuário */
 .user-menu:hover .dropdown-menu {
     display: flex;
 }
 
-/* Gira a engrenagem quando o menu está aberto */
 .user-menu:hover .user-welcome .fa-cog {
     transform: rotate(90deg);
 }
 
-/* Estilo dos itens do dropdown */
 .dropdown-menu li {
     margin: 0 !important;
     width: 100%;
@@ -278,7 +264,7 @@ body {
 
 .container {
     display: flex;
-    flex-direction: column; /* permite reordenar elementos */
+    flex-direction: column; 
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -350,12 +336,11 @@ p {
     text-decoration: underline;
 }
 
-/* ====== BOTÃO VOLTAR ====== */
 .btn-voltar-site {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    order: 0; /* padrão: acima da login-box */
+    order: 0; 
     margin: 0 auto 20px auto;
     background: #fff;
     color: #bfa76f;
@@ -383,7 +368,6 @@ p {
     transform: translateY(-2px) scale(1.04);
 }
 
-/* ====== BOTÃO LOGIN ====== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -405,13 +389,11 @@ p {
     transform: translateY(-2px) scale(1.04);
 }
 
-/* ====== INFORMAÇÕES DE VERSÃO ====== */
 .version-info {
     margin-top: 20px;
     font-size: 0.8em;
     color: #999;
 }
-/* ===== RESPONSIVO ===== */
 @media (max-width: 768px) {
     body {
         padding: 15px;
@@ -435,13 +417,12 @@ p {
         font-size: 0.95rem;
     }
 
-    /* botão volta para baixo */
     .btn-voltar-site {
-        order: 1; /* move o botão para depois da login-box */
-        margin: 20px 0 0 0; /* distância do formulário */
-        width: 100%; /* ocupa toda a largura da login-box */
-        max-width: 350px; /* mesma largura da login-box */
-        justify-content: center; /* centraliza o texto do botão */
+        order: 1; 
+        margin: 20px 0 0 0; 
+        width: 100%; 
+        max-width: 350px; 
+        justify-content: center; 
     }
 }
 
@@ -463,10 +444,9 @@ p {
         font-size: 0.9rem;
     }
 
-    /* botão volta para baixo */
     .btn-voltar-site {
         width: 100%;
-        max-width: 300px; /* ajusta à largura menor */
+        max-width: 300px; 
         margin: 20px 0 0 0;
     }
 }
