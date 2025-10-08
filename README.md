@@ -65,5 +65,4 @@ Funcionalidades principais implementadas, como:
 - [x] - [RF004] O sistema deve processar a compra, incluindo cálculo de valores, validação do pagamento e registro do pedido.
 - [x] - [RF005] O sistema deve permitir que o Cliente confirme o pedido após o processamento.
 - [x] - [RF006] O sistema deve permitir que o Cliente selecione a forma de recebimento (ex.: entrega por motoboy, retirada, etc).
-![](./docs/Diagrama%20Cantina.png)
 
