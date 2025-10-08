@@ -1,0 +1,255 @@
+/* /styles/auth-style.css - VERSÃO FINAL REFINADA */
+
+/* 1. FONTES E PALETA DE CORES OFICIAL */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500&display=swap' );
+
+:root {
+    --main-color: #d9933d;
+    --black: #13131a;
+    --bg: #592f16;
+    --border: .1rem solid rgba(255, 255, 255, .3);
+    --text-light: #faebd7;
+    --text-secondary: #a7a7a7;
+    --error-color: #ff8a80;
+    --success-color: #a5d6a7;
+}
+
+/* 2. CONFIGURAÇÕES GLOBAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    overflow: hidden;
+    color: var(--text-secondary);
+    background-color: var(--black);
+}
+
+.auth-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 3. LADO ESQUERDO (IMAGEM) */
+.auth-showcase {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2574&auto=format&fit=crop' );
+    background-size: cover;
+    background-position: center;
+    animation: fadeIn 2s ease-out;
+}
+
+.showcase-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(19, 19, 26, 0.8), rgba(19, 19, 26, 0));
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 4. LADO DIREITO (FORMULÁRIO) */
+.auth-form-section {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    position: relative;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    background: var(--black);
+    border: 1px solid var(--border); /* Linha sutil em volta do container */
+    border-radius: 20px;
+    padding: 40px;
+    /* Sombra para dar profundidade e destaque */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    animation: slideUp 1s ease-out 0.5s both;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* LOGO MAIOR */
+.auth-header img {
+    width: 200px; /* Aumentei o tamanho */
+    margin-bottom: 15px;
+}
+
+.auth-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.6rem;
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+/* LINHA EM VOLTA DO INPUT */
+.input-box input {
+    width: 100%;
+    height: 55px;
+    background: rgba(255, 255, 255, 0.05); /* Fundo sutil para o input */
+    border: 1px solid var(--border); /* Borda completa */
+    border-radius: 10px; /* Bordas arredondadas */
+    font-size: 1.6rem;
+    color: var(--text-light);
+    padding: 0 50px 0 20px; /* Ajuste no padding */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-box input::placeholder {
+    color: var(--text-secondary);
+}
+
+.input-box input:focus {
+    outline: none;
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px rgba(217, 153, 61, 0.3); /* Brilho ao focar */
+}
+
+.input-box input:focus + i {
+    color: var(--main-color);
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.8rem;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+/* ESQUECEU A SENHA - REPOSICIONADO */
+.auth-options {
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita */
+    font-size: 1.4rem;
+    margin: -15px 5px 20px 0;
+}
+
+.auth-options a {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.auth-options a:hover {
+    text-decoration: underline;
+    color: var(--main-color);
+}
+
+.btn {
+    width: 100%;
+    height: 55px;
+    background: var(--main-color);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.8rem;
+    color: var(--black);
+    font-weight: 600;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e0c4a0;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(217, 153, 61, 0.2);
+}
+
+.switch-form-link {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-secondary);
+}
+
+.switch-form-link a {
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-voltar-site {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: var(--main-color);
+    color: var(--black);
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-voltar-site:hover {
+    background-color: #e0c4a0;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(217, 153, 61, 0.2);
+}
+
+.auth-links {
+    text-decoration: none;
+    font-size: 1.4rem;
+    margin-top: -10px;
+    color: var(--text-secondary);
+
+}
+
+
+/* 5. RESPONSIVIDADE */
+@media (max-width: 992px) {
+    .auth-showcase { display: none; }
+    .auth-form-section {
+        width: 100%;
+        background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2574&auto=format&fit=crop' );
+        background-size: cover;
+        background-position: center;
+    }
+    .auth-form-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(18, 18, 18, 0.7);
+        z-index: 1;
+    }
+    .auth-container, .btn-voltar-site {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-form-section { padding: 20px; }
+    .auth-container { padding: 20px; }
+    .auth-header h1 { font-size: 3.2rem; }
+    .btn-voltar-site { top: 20px; left: 20px; }
+}

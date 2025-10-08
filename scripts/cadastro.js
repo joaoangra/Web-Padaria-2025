@@ -1,5 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
+document.addEventListener("DOMContentLoaded", ( ) => {
+  const form = document.getElementById("login-form");
+  const messageDiv = document.getElementById("message");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -7,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const senha = document.getElementById("senha").value;
 
     if (!email || !senha) {
-      alert("Preencha todos os campos!");
+      messageDiv.textContent = "Por favor, preencha todos os campos!";
+      messageDiv.style.color = "var(--error-color)";
       return;
     }
 
@@ -17,27 +19,22 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha } )
       });
-
       const data = await response.json();
 
-      // A ÚNICA CONDIÇÃO É A API RETORNAR 'OK' E UM TOKEN
       if (response.ok && data.token) {
-        // Apenas salva o token. Nada mais.
         localStorage.setItem('authToken', data.token);
-        
-        // Limpa qualquer dado de usuário antigo para evitar inconsistências
-        localStorage.removeItem('userData'); 
-        
-        alert("Login realizado com sucesso!");
-        window.location.href = "/web/Home.html";
+        localStorage.removeItem('userData');
+        messageDiv.textContent = "Login bem-sucedido! Redirecionando...";
+        messageDiv.style.color = "var(--success-color)";
+        setTimeout(() => { window.location.href = "/web/Home.html"; }, 1500);
       } else {
-        throw new Error(data.error || "Erro ao realizar login. Verifique suas credenciais.");
+        throw new Error(data.error || "Credenciais inválidas. Tente novamente.");
       }
     } catch (error) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('userData');
-      alert(error.message);
-      console.error("Falha no processo de login:", error);
+      messageDiv.textContent = error.message;
+      messageDiv.style.color = "var(--error-color)";
     }
   });
 });

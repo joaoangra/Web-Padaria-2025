@@ -3,39 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Padaria Paladar Nobre</title>
     <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
-    <link rel="stylesheet" href="../styles/cadastro.css">
-    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../styles/auth-style.css">
 </head>
-<body background="../docs/Cadastro.png">
-    <div class="container">
-        <div class="login-box">
-            <img src="../docs/logoPN.png" alt="" srcset="">
-            <form>
-                <div class="textbox">
-                    <input type="text" id="email" placeholder="Login" required>
-                </div>
-                <div class="textbox">
-                    <input type="password" id="senha" placeholder="Senha" required>
-                    <span class="toggle-password"></span>
-                </div>
-                <div class="links">
-                    <a href="registro.html">Primeiro acesso</a> / <a href="#">Esqueceu sua senha?</a>
-                </div>
-                <button type="submit" class="btn">Enviar</button>
-            </form>
-            <div class="version-info">
-                <p>JWT versão: 02c6c63</p>
-                <p>Versão do projeto: 0.0.1</p>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-showcase">
+            <div class="showcase-overlay"></div>
+            <a href="Home.html" class="btn-voltar-site"><i class="fas fa-arrow-left"></i> Voltar ao Site</a>
+        </div>
+        <div class="auth-form-section">
+            <div class="auth-container">
+                <form id="login-form">
+                    <div class="auth-header">
+                        <img src="../docs/logoPN.png" alt="Logo Paladar Nobre">
+                        <h1>Bem-vindo de Volta!</h1>
+                    </div>
+                    <div id="message"></div>
+                    <div class="input-box"><input type="email" id="email" placeholder="E-mail" required><i class="fas fa-envelope"></i></div>
+                    <div class="input-box"><input type="password" id="senha" placeholder="Senha" required><i class="fas fa-lock"></i></div>
+                    <div class="auth-links"><a href="#">Esqueceu sua senha?</a></div>
+                    <button type="submit" class="btn">Entrar</button>
+                    <div class="switch-form-link"><p>Não tem uma conta? <a href="registro.html">Crie uma conta</a></p></div>
+                </form>
             </div>
         </div>
-
-        <!-- Botão de voltar agora está dentro da container, depois da login-box -->
-        <a href="Home.html" class="btn-voltar-site">
-            <span>←</span> Voltar para a Página Principal
-        </a>
     </div>
-    <script src="/scripts/auth.js"></script>
     <script src="../scripts/cadastro.js"></script>
 </body>
 </html>

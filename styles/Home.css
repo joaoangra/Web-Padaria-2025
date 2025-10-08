@@ -1026,3 +1026,36 @@ footer {
             font-size: 15px;
         }
     }
+
+    /* ============================================== */
+/*          ESTILO DAS REDES SOCIAIS (RODAPÉ)     */
+/* ============================================== */
+
+.social-links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center; /* Centraliza o(s) ícone(s) */
+    gap: 15px;
+}
+
+.social-links a {
+    display: flex; /* Essencial para centralizar a imagem dentro */
+    align-items: center;
+    justify-content: center;
+    width: 40px;  /* Largura do círculo */
+    height: 40px; /* Altura do círculo */
+    background-color: var(--main-color); /* Usa a cor principal da sua marca */
+    border-radius: 50%; /* Transforma o link em um círculo perfeito */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: #e76f51; /* Cor de hover, pode ajustar se quiser */
+    transform: scale(1.1); /* Efeito de leve aumento ao passar o mouse */
+}
+
+.social-links a img {
+    width: 55%;  /* Ajusta o tamanho do ícone do Instagram dentro do círculo */
+    height: 55%;
+    object-fit: contain; /* Garante que a imagem não fique distorcida */
+}
