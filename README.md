@@ -1,6 +1,6 @@
 # Projeto-padaria-2025
 
-- [- GIT PAGES ](https://joaoangra.github.io/Web-Padaria-2025/web/Home.html)
+- [- GIT PAGES ](https://joaoangra.github.io/Web-Padaria-2025/)
 
 # **Integrantes**
 -  [Rebeca Lima](https://github.com/Rebecaalimaa)
