@@ -96,26 +96,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- LÓGICA DE TEMA ---
-    const aplicarTema = (tema) => {
-        document.body.classList.remove('light-theme');
-        if (tema === 'light') {
-            document.body.classList.add('light-theme');
-        }
-    };
-
-    const salvarPreferenciaTema = (tema) => {
-        localStorage.setItem('themePreference', tema);
-    };
-
-    const temaSalvo = localStorage.getItem('themePreference') || 'dark';
-    document.querySelector(`input[name="theme"][value="${temaSalvo}"]`).checked = true;
-    
-    themeRadios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const novoTema = e.target.value;
-            aplicarTema(novoTema);
-            salvarPreferenciaTema(novoTema);
-        });
-    });
 });
