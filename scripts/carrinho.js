@@ -109,7 +109,7 @@ function finalizarPedido() {
         return;
     }
 
-    window.location.href = "/web/checkout.html";
+    window.location.href = "../web/checkout.html";
 }
 
 document.addEventListener('DOMContentLoaded', () => {
