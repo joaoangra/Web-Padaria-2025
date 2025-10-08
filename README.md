@@ -67,26 +67,3 @@ Funcionalidades principais implementadas, como:
 - [x] - [RF006] O sistema deve permitir que o Cliente selecione a forma de recebimento (ex.: entrega por motoboy, retirada, etc).
 ![](./docs/Diagrama%20Cantina.png)
 
-## Padaria (Trello)
-![](./docs/Trello.png)
-
-## Padaria (Diagrama de Classes)
-![](./docs/Diagrama_de_Classes.png)
-
-## Padaria (DER)
-![](./docs/DER%20padaria.png)
-
-## Padaria (Canvas)
-![](./docs/Canvas.png)
-
-## Padaria (Gantt)
-![](./docs/Gantt.png)
-
-## Padaria (SWOT)
-![](./docs/SWOT.png)
-
-## Padaria (Triângulo de Ferro)
-![](./docs/Triangulo.png)
-
-## Padaria (Diagrama de Atividades)
-![](./docs/Captura%20de%20tela%202025-06-18%20084534.png)
