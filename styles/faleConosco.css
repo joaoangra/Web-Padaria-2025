@@ -1,4 +1,8 @@
+/* /styles/faleConosco.css - VERSÃO COM MENU INTELIGENTE E LAYOUT CENTRALIZADO */
 
+/* ============================================== */
+/*          CONFIGURAÇÕES GLOBAIS E FONTES        */
+/* ============================================== */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap' );
 
 :root {
@@ -17,6 +21,9 @@ section { padding: 3rem 7%; }
 .btn { margin-top: 1rem; display: inline-block; padding: 1.2rem 3rem; font-size: 1.7rem; font-weight: 500; color: var(--black); background: var(--main-color); cursor: pointer; text-align: center; text-transform: capitalize; }
 .btn:hover { letter-spacing: .2rem; opacity: 0.9; }
 
+/* ============================================== */
+/*          ESTILOS DO HEADER (Fale Conosco)      */
+/* ============================================== */
 .header {
     display: flex;
     align-items: center;
@@ -30,36 +37,38 @@ section { padding: 3rem 7%; }
 }
 
 .header .logo {
-    flex-shrink: 0; 
+    flex-shrink: 0; /* Impede que a logo encolha */
 }
 
 .header .logo img {
     height: 50px;
 }
 
+/* CORREÇÃO 2: Centraliza a barra de navegação */
 .header .navbar {
-    flex-grow: 1; 
+    flex-grow: 1; /* Faz a navbar ocupar o espaço disponível */
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centraliza o conteúdo da navbar (a lista <ul>) */
 }
 
 .header .navbar ul {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 3.5rem;
+    gap: 3.5rem; /* Aumenta o espaço entre os links */
 }
 
 .header .navbar a {
-    font-size: 1.7rem;
+    font-size: 1.7rem; /* Aumenta um pouco a fonte para melhor visualização */
     color: var(--text-light);
-    padding-bottom: 5px;
+    padding-bottom: 5px; /* Adiciona um respiro para o efeito de hover */
 }
 
 .header .navbar a:hover {
     color: var(--main-color);
 }
 
+/* --- MENU DROPDOWN COM COMPORTAMENTO CORRETO --- */
 .header .navbar .user-menu {
     position: relative;
 }
@@ -78,6 +87,7 @@ section { padding: 3rem 7%; }
     transition: transform 0.3s ease;
 }
 
+/* 1. O menu dropdown começa escondido */
 .header .navbar .dropdown-menu {
     display: none;
     position: absolute;
@@ -88,14 +98,16 @@ section { padding: 3rem 7%; }
     border-radius: 5px;
     list-style: none;
     padding: 10px 0;
-    min-width: 180px; 
+    min-width: 180px; /* Aumenta um pouco a largura */
     z-index: 1001;
     flex-direction: column;
     box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    /* CORREÇÃO 1: Remove a margem que criava o espaço e fechava o menu */
     margin-top: 0;
-    padding-top: 15px; 
+    padding-top: 15px; /* Adiciona o espaço DENTRO do menu */
 }
 
+/* 2. Mostra o dropdown QUANDO o mouse passa sobre o container .user-menu */
 .header .navbar .user-menu:hover > .dropdown-menu {
     display: flex;
 }
@@ -111,10 +123,10 @@ section { padding: 3rem 7%; }
 
 .header .navbar .dropdown-menu li a {
     display: block;
-    padding: 12px 20px; 
+    padding: 12px 20px; /* Aumenta o padding para facilitar o clique */
     color: var(--text-light) !important;
     font-size: 1.5rem !important;
-    white-space: nowrap; 
+    white-space: nowrap; /* Impede que o texto quebre */
 }
 
 .header .navbar .dropdown-menu li a:hover {
@@ -122,6 +134,9 @@ section { padding: 3rem 7%; }
     color: var(--black) !important;
 }
 
+/* ============================================== */
+/*          SEÇÃO DE CONTATO E RODAPÉ             */
+/* ============================================== */
 .heading { text-align: center; color: var(--text-white); text-transform: uppercase; padding-bottom: 3.5rem; font-size: 4rem; }
 .heading span { color: var(--main-color); text-transform: uppercase; }
 .contact .row { display: flex; background: var(--black); flex-wrap: wrap; gap: 2rem; padding: 2rem; border-radius: 5px; }
@@ -144,69 +159,78 @@ section { padding: 3rem 7%; }
 .footer .footer-content .contact i { color: var(--main-color); font-size: 1.8rem; }
 
 
+/* ============================================== */
+/*                  RESPONSIVIDADE                */
+/* ============================================== */
 
+/* Para Tablets e Telas Menores (até 991px) */
 @media (max-width: 991px) {
     html {
-        font-size: 55%; 
+        font-size: 55%; /* Reduz o tamanho base da fonte para ajustar os elementos */
     }
 
     .header {
-        padding: 1.5rem 3%; 
+        padding: 1.5rem 3%; /* Reduz o espaçamento lateral do cabeçalho */
     }
 
     section {
-        padding: 3rem;
+        padding: 3rem; /* Reduz o espaçamento lateral das seções */
     }
 }
 
+/* Para Celulares (até 768px) */
 @media (max-width: 768px) {
+    /* --- Ajustes do Cabeçalho --- */
     .header {
-        flex-direction: column;
+        flex-direction: column; /* Empilha a logo e a navegação */
         padding: 1.5rem;
     }
 
     .header .logo {
-        margin-bottom: 1.5rem; 
+        margin-bottom: 1.5rem; /* Adiciona espaço abaixo da logo */
     }
 
     .header .navbar {
-        width: 100%; 
+        width: 100%; /* Faz a navbar ocupar toda a largura */
     }
 
     .header .navbar ul {
-        justify-content: center; 
+        justify-content: center; /* Centraliza os links do menu */
         gap: 2.5rem;
     }
 
+    /* --- Ajustes da Seção de Contato --- */
     .contact .row {
-        flex-direction: column;
+        flex-direction: column; /* Empilha o mapa e o formulário */
         padding: 1.5rem;
     }
 
     .contact .row form {
-        padding: 2rem 1rem; 
+        padding: 2rem 1rem; /* Reduz o padding do formulário */
     }
 
+    /* --- Ajustes do Rodapé --- */
     .footer .footer-content {
-        grid-template-columns: 1fr; 
-        text-align: center; 
+        grid-template-columns: 1fr; /* Faz cada seção do rodapé ocupar uma linha */
+        text-align: center; /* Centraliza o texto do rodapé */
     }
 
     .footer .footer-content .contact p {
-        justify-content: center; 
+        justify-content: center; /* Centraliza os ícones e textos de contato */
     }
 }
 
+/* Para Telas Muito Pequenas (até 450px) */
 @media (max-width: 450px) {
     html {
-        font-size: 50%;
+        font-size: 50%; /* Reduz ainda mais a fonte base */
     }
 
     .header .navbar ul {
-        gap: 2rem; 
+        gap: 2rem; /* Diminui o espaço entre os links do menu */
     }
 
     .heading {
-        font-size: 3rem;
+        font-size: 3rem; /* Diminui o título principal */
     }
 }
