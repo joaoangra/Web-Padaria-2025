@@ -1,11 +1,7 @@
-// /scripts/checkout.js - VERSÃO FINAL COM PREENCHIMENTO AUTOMÁTICO E FLUXO DE PAGAMENTO COMPLETO
-
-// Variáveis globais para controle
 let carrinho = [];
 let timerInterval;
 let pixProcessed = false;
 
-// --- INICIALIZAÇÃO ---
 document.addEventListener("DOMContentLoaded", function() {
     inicializarCheckout();
 });
@@ -18,7 +14,6 @@ function inicializarCheckout() {
     validarFormulario();
 }
 
-// --- LÓGICA DE DADOS E FORMULÁRIO ---
 
 function preencherDadosDoUsuarioLogado() {
     const userDataString = localStorage.getItem('userData');
@@ -91,7 +86,6 @@ function validarFormulario() {
     btnFinalizar.disabled = !isFormValid;
 }
 
-// --- CONFIGURAÇÕES DE EVENTOS E MÁSCARAS ---
 
 function configurarEventListeners() {
     document.querySelectorAll('.checkout-content input').forEach(input => input.addEventListener('input', validarFormulario));
@@ -128,7 +122,6 @@ function configurarMascaras() {
     });
 }
 
-// --- LÓGICA DE PAGAMENTO ---
 
 function finalizarPedido() {
     const formaPagamento = document.querySelector("input[name='pagamento']:checked").value;
@@ -156,8 +149,9 @@ async function processarPagamentoCartao() {
     
     setTimeout(async () => {
         try {
-            // const dadosDoPedido = coletarDadosDoPedido("Cartao");
-            // await enviarPedidoParaAPI(dadosDoPedido); // Descomente para enviar para a API real
+            const dadosDoPedido = coletarDadosDoPedido("Cartao");
+            if (!dadosDoPedido) return; // Se não houver cliente_id, parar o processo
+            await enviarPedidoParaAPI(dadosDoPedido);
             console.log("Pedido (Cartão) enviado para API (simulado).");
 
             fecharModal("processamento");
@@ -182,15 +176,15 @@ async function processarPagamentoPix() {
     gerarQRCode();
     iniciarTimer(600); // 10 minutos
 
-    // Simulação de confirmação de pagamento
     setTimeout(async () => {
         if (pixProcessed) return;
         pixProcessed = true;
         clearInterval(timerInterval);
 
         try {
-            // const dadosDoPedido = coletarDadosDoPedido("Pix");
-            // await enviarPedidoParaAPI(dadosDoPedido);
+            const dadosDoPedido = coletarDadosDoPedido("Pix");
+            if (!dadosDoPedido) return; // Se não houver cliente_id, parar o processo
+            await enviarPedidoParaAPI(dadosDoPedido);
             console.log("Pedido (PIX) enviado para API (simulado).");
 
             fecharModal("processamento");
@@ -205,8 +199,9 @@ async function processarPagamentoPix() {
 
 async function processarPagamentoDinheiro() {
     try {
-        // const dadosDoPedido = coletarDadosDoPedido("Dinheiro");
-        // await enviarPedidoParaAPI(dadosDoPedido);
+        const dadosDoPedido = coletarDadosDoPedido("Dinheiro");
+        if (!dadosDoPedido) return; // Se não houver cliente_id, parar o processo
+        await enviarPedidoParaAPI(dadosDoPedido);
         console.log("Pedido (Dinheiro) enviado para API (simulado).");
 
         localStorage.removeItem("carrinho");
@@ -216,8 +211,6 @@ async function processarPagamentoDinheiro() {
         alert("Houve um erro ao finalizar seu pedido. Tente novamente.");
     }
 }
-
-// --- FUNÇÕES AUXILIARES E DE UI ---
 
 function mostrarEndereco(tipo) {
     const enderecoSection = document.getElementById("section-endereco");
@@ -286,7 +279,7 @@ function copiarCodigoPix() {
         btn.style.background = "#28a745";
         setTimeout(() => {
             btn.textContent = "Copiar Código";
-            btn.style.background = ""; // Volta ao estilo original
+            btn.style.background = ""; 
         }, 2000);
     }).catch(() => alert("Erro ao copiar código."));
 }
@@ -302,3 +295,87 @@ function mostrarSucesso(mensagem) {
 const style = document.createElement("style");
 style.textContent = `.item-resumo { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 1.4rem; } .item-resumo:last-child { border-bottom: none; }`;
 document.head.appendChild(style);
+
+
+
+function coletarDadosDoPedido(formaPagamento) {
+    const userDataString = localStorage.getItem('userData');
+    const userData = userDataString ? JSON.parse(userDataString) : {};
+
+    const cliente_id = userData.cliente_id; 
+    if (!cliente_id) {
+        console.error("Cliente ID não encontrado. O usuário precisa estar logado.");
+        alert("Por favor, faça login para finalizar o pedido.");
+        return null;
+    }
+
+    const isEntrega = document.getElementById('entrega').checked;
+    const enderecoEntrega = isEntrega ? {
+        rua: document.getElementById('rua').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        cep: document.getElementById('cep').value,
+        complemento: document.getElementById('complemento').value || null
+    } : null;
+
+    const itensPedido = carrinho.map(item => ({
+        produto_id: item.id,
+        quantidade: item.quantidade,
+        preco_unitario: item.preco,
+        
+    }));
+
+    const subtotal = carrinho.reduce((acc, item) => acc + item.total, 0);
+    const taxaEntrega = isEntrega ? 5.00 : 0.00;
+    const totalFinal = subtotal + taxaEntrega;
+
+    return {
+        cliente_id: cliente_id,
+        data: new Date().toISOString(), // Data atual do pedido
+        sub_total: subtotal,
+        forma_pagamento: formaPagamento,
+        total_final: totalFinal, // Adicionando total_final para ser enviado
+        itens: itensPedido,
+        endereco_entrega: enderecoEntrega // Incluir endereço de entrega se for entrega
+    };
+}
+
+
+
+
+async function enviarPedidoParaAPI(dadosDoPedido) {
+    try {
+        const response = await fetch("https://api-padaria-seven.vercel.app/pedidos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosDoPedido),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erro ao enviar pedido para a API.");
+        }
+
+        const result = await response.json();
+        console.log("Pedido enviado com sucesso:", result);
+        return result;
+    } catch (error) {
+        console.error("Erro na função enviarPedidoParaAPI:", error);
+        throw error;
+    }
+}
+
+if (!localStorage.getItem('userData')) {
+    const testUserData = {
+        cliente_id: 1, 
+        nome: 'Cliente Teste',
+        email: 'teste@example.com',
+        telefone: '(11) 98765-4321',
+        endereco: 'Rua Teste, 123'
+    };
+    localStorage.setItem('userData', JSON.stringify(testUserData));
+}
+
