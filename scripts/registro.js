@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const senha = document.getElementById("senha").value;
         const confirmSenha = document.getElementById("confirmSenha").value;
 
-        messageDiv.textContent = ""; // Limpa a mensagem anterior
+        messageDiv.textContent = ""; 
 
         if (!nome || !email || !telefone || !endereco || !senha || !confirmSenha) {
             messageDiv.textContent = "Por favor, preencha todos os campos!";
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (res.ok) {
                 messageDiv.textContent = "Cadastro realizado com sucesso! Redirecionando para o login...";
                 messageDiv.style.color = "var(--success-color)";
-                setTimeout(() => { window.location.href = "/web/cadastro.html"; }, 2000);
+                setTimeout(() => { window.location.href = "../web/cadastro.html"; }, 2000);
             } else {
                 throw new Error(data.error || "Erro ao realizar o cadastro.");
             }
