@@ -23,10 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         produtos.forEach(produto => {
             const box = document.createElement('div');
             box.className = 'box';
-            // CORREÇÃO: Usando 'produto_id' para o data-id
             box.dataset.id = produto.produto_id; 
             
-            // CORREÇÃO: Usando 'qtd_estoque' para verificar o estoque
             const estoqueTexto = produto.qtd_estoque > 0 ? 'Em estoque' : 'Fora de estoque';
             const estoqueClasse = produto.qtd_estoque > 0 ? 'em-estoque' : 'fora-estoque';
 
@@ -77,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function abrirModal(id) {
-        // CORREÇÃO: Usando 'produto_id' para encontrar o produto
         const produto = cardapio.find(p => p.produto_id === id);
         if (!produto) return;
         document.getElementById('modal-img').src = produto.imagem;
@@ -95,10 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.target.classList.contains('btn-cart')) {
             e.preventDefault();
-            // CORREÇÃO: Usando 'produto_id' para encontrar o produto
             const produto = cardapio.find(p => p.produto_id === id);
             if (produto) {
-                // Chama a função GLOBAL do carrinho.js, passando o objeto correto
                 adicionarItemAoCarrinho(produto);
             }
         } else if (e.target.classList.contains('btn-fav')) {

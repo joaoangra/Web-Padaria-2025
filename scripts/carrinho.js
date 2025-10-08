@@ -96,24 +96,20 @@ function removerItem(produto_id) {
 }
 
 function finalizarPedido() {
-    // 1. Verifica se existe um token de autenticação salvo
     const token = localStorage.getItem('authToken');
 
     if (!token) {
-        // Se NÃO houver token, exibe o alerta e redireciona para o login
         alert("Você precisa estar logado para finalizar a compra.");
-        window.location.href = "/web/cadastro.html"; // Leva para a página de login
-        return; // Para a execução da função aqui
+        window.location.href = "../web/cadastro.html"; 
+        return;
     }
 
-    // 2. Verifica se o carrinho não está vazio
     if (carrinho.length === 0) {
         alert("Seu carrinho está vazio.");
         return;
     }
 
-    // 3. Se tudo estiver certo (logado e com itens), vai para o checkout
-    window.location.href = "/web/checkout.html";
+    window.location.href = "../web/checkout.html";
 }
 
 document.addEventListener('DOMContentLoaded', () => {
