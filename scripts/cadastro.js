@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", ( ) => {
         localStorage.removeItem('userData');
         messageDiv.textContent = "Login bem-sucedido! Redirecionando...";
         messageDiv.style.color = "var(--success-color)";
-        setTimeout(() => { window.location.href = "/web/Home.html"; }, 1500);
+        setTimeout(() => { window.location.href = "../web/Home.html"; }, 1500);
       } else {
         throw new Error(data.error || "Credenciais inválidas. Tente novamente.");
       }
