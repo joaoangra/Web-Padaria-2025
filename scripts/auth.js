@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="#" class="user-welcome">Olá, ${user.nome.split(' ')[0]} <i class="fas fa-cog"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="/web/perfil.html">Meu Perfil</a></li>
-                    <li><a href="/web/perfil.html#options">Opções</a></li>
                     <li><a href="#" id="logout-button">Sair</a></li>
                 </ul>
             </li>

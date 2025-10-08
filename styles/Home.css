@@ -896,6 +896,7 @@ footer {
 
 /* REDES SOCIAIS */
 .social-links {
+    text-decoration: non;
     margin-top: 10px;
     display: flex;
     justify-content: center;
