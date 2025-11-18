@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Client Menu Visualization Styles (vizuCli.css) - Padaria Paladar Nobre
+   Depende de: global.css (para variáveis)
+   ========================================================================== */
+
+/* === ESTILOS ESPECÍFICOS DO CARDÁPIO (PRODUTOS) === */
+
+.products {
+    padding: var(--section-spacing) 0;
+    background: var(--bg-light); /* Usando cor clara para contraste com o header */
+}
+
+.products .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+
+.products .box-container .box {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.products .box-container .box:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.products .box-container .box .icons {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.products .box-container .box .icons a {
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    font-size: 1.8rem;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all var(--transition-normal);
+}
+
+.products .box-container .box .icons a:hover {
+    background: var(--primary-color);
+    color: var(--bg-white);
+    border-color: var(--primary-color);
+}
+
+.products .box-container .box .image {
+    padding: 1rem 0;
+}
+
+.products .box-container .box .image img {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.products .box-container .box .content h3 {
+    color: var(--text-dark);
+    font-size: 2.2rem;
+    margin-top: 1rem;
+}
+
+.products .box-container .box .content .stars {
+    padding: 1rem 0;
+}
+
+.products .box-container .box .content .stars i {
+    font-size: 1.7rem;
+    color: var(--primary-color);
+}
+
+.products .box-container .box .content .price {
+    color: var(--text-dark);
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.products .box-container .box .content .price span {
+    text-decoration: line-through;
+    font-weight: lighter;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-left: 1rem;
+}
+
+.btn-fav.favoritado {
+    color: var(--error) !important;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--error);
+}
+
+.estoque {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    width: fit-content;
+}
+
+.em-estoque {
+    color: var(--success);
+    background-color: rgba(46, 204, 113, 0.2);
+}
+
+.fora-estoque {
+    color: var(--error);
+    background-color: rgba(231, 76, 60, 0.2);
+    cursor: not-allowed;
+    user-select: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .products .box-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .products .box-container {
+        grid-template-columns: 1fr;
+    }
+    .products .box-container .box .image img {
+        height: 150px;
+    }
+}

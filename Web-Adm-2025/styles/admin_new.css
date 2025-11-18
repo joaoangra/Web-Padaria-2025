@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Admin Dashboard Styles - Padaria Paladar Nobre
+   ========================================================================== */
+
+.admin-container {
+    background-color: var(--background-dark);
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Header */
+.admin-header {
+    background-color: var(--background-dark);
+    padding: 1.5rem;
+    border-bottom: var(--border);
+}
+
+.admin-header .logo img {
+    height: 5rem;
+}
+
+/* Navegação */
+.admin-nav {
+    background-color: var(--background-dark);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    margin: 2rem 0;
+}
+
+.admin-nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.admin-nav a {
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-nav a:hover,
+.admin-nav a.active {
+    background-color: var(--accent-color);
+    color: var(--background-dark);
+}
+
+.admin-nav i {
+    font-size: 1.8rem;
+}
+
+/* Cards do Dashboard */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.dashboard-card {
+    background-color: var(--background-dark);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: var(--border);
+    text-align: center;
+}
+
+.dashboard-card i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.dashboard-card h3 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card p {
+    color: var(--text-secondary);
+    font-size: 1.6rem;
+}
+
+/* Tabelas */
+.admin-table {
+    width: 100%;
+    background-color: var(--background-dark);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1.5rem;
+    text-align: left;
+    border-bottom: var(--border);
+}
+
+.admin-table th {
+    background-color: var(--accent-color);
+    color: var(--background-dark);
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Formulários */
+.admin-form {
+    background-color: var(--background-dark);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: var(--border);
+    max-width: 60rem;
+    margin: 2rem auto;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--background-main);
+    border: var(--border);
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    border-radius: 0.5rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--accent-color);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: var(--success);
+    color: var(--background-dark);
+}
+
+.status-pending {
+    background-color: var(--warning);
+    color: var(--background-dark);
+}
+
+.status-inactive {
+    background-color: var(--error);
+    color: var(--text-primary);
+}
+
+/* Ações */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-action {
+    padding: 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: var(--accent-color);
+    color: var(--background-dark);
+}
+
+.btn-delete {
+    background-color: var(--error);
+    color: var(--text-primary);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .admin-nav ul {
+        flex-direction: column;
+    }
+
+    .admin-nav a {
+        width: 100%;
+    }
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-table {
+        overflow-x: auto;
+    }
+}

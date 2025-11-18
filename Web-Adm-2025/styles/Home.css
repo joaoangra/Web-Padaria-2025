@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Home Page and Footer Styles - Padaria Paladar Nobre
+   Depende de: global.css (para variáveis)
+   ========================================================================== */
+
+/* ==== FOOTER ==== */
+footer {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 4rem 0 1rem;
+    font-size: 1.4rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-section {
+    flex: 1 1 300px;
+    margin-bottom: 2rem;
+}
+
+.footer-section h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.footer-section p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+.footer-section .contactar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.social-links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.social-links img {
+    width: 35px;
+    height: 35px;
+    transition: transform var(--transition-normal);
+}
+
+.social-links img:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+/* ==== MODAL (Estilos base para o modal de detalhes) ==== */
+.modal {
+    display: none; /* use .modal.show to display */
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background-color: rgba(0,0,0,0.55);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    overscroll-behavior: contain;
+}
+
+.modal.show { display: flex; }
+
+.modal-content {
+    background-color: var(--bg-white);
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 640px;
+    position: relative;
+    box-shadow: var(--shadow-xl);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.modal-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.modal-body img {
+    width: 40%;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.modal-info {
+    width: 60%;
+}
+
+.modal-info h2 {
+    font-size: 2.8rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.modal-info p {
+    font-size: 1.6rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.modal-footer .price {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 3rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color var(--transition-normal);
+}
+
+.close:hover {
+    color: var(--error);
+}
+
+/* Responsividade do Modal */
+@media (max-width: 600px) {
+    .modal-body {
+        flex-direction: column;
+    }
+    .modal-body img, .modal-info {
+        width: 100%;
+    }
+    .modal-body img {
+        max-height: 180px;
+    }
+    .modal-info h2 {
+        font-size: 2.2rem;
+    }
+    .modal-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .modal-footer .price {
+        font-size: 2rem;
+    }
+    .modal-footer .btn {
+        width: 100%;
+    }
+}

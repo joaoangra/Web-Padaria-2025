@@ -1,0 +1,226 @@
+/* ==========================================================================
+   Authentication Styles (Login/Cadastro) - Padaria Paladar Nobre
+   Depende de: global.css (para variáveis)
+   ========================================================================== */
+
+body {
+    background-color: var(--bg-lighter);
+    overflow-x: hidden;
+}
+
+.auth-wrapper {
+    display: flex;
+    width: 100vw;
+    min-height: 100vh;
+    padding-top: 0; /* Remove o padding do header */
+}
+
+/* Seção de Imagem (Desktop) */
+.auth-showcase {
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2574&auto=format&fit=crop'); /* Imagem de exemplo */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.showcase-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(19, 19, 26, 0.8), rgba(19, 19, 26, 0));
+}
+
+/* Seção do Formulário */
+.auth-form-section {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem;
+    position: relative;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header img {
+    width: 150px;
+    margin-bottom: 15px;
+}
+
+.auth-header h1 {
+    font-size: 3.2rem;
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.auth-header p {
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+}
+
+/* Campos de Input */
+.input-box {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 50px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1.6rem;
+    color: var(--text-dark);
+    padding: 0 50px 0 20px;
+    transition: all var(--transition-normal);
+}
+
+.input-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.8rem;
+    color: var(--text-muted);
+    transition: color var(--transition-normal);
+}
+
+.input-box input:focus + i {
+    color: var(--primary-color);
+}
+
+/* Opções (Esqueci a senha) */
+.auth-options {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.4rem;
+    margin: -15px 0 20px 0;
+}
+
+.auth-options a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.auth-options a:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+
+/* Botão Principal (Reutiliza .btn de global.css) */
+.auth-container .btn {
+    margin-top: 15px;
+    height: 50px;
+    font-size: 1.6rem;
+}
+
+/* Link de Troca de Formulário */
+.switch-form-link {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 25px;
+    color: var(--text-muted);
+}
+
+.switch-form-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.switch-form-link a:hover {
+    text-decoration: underline;
+}
+
+/* Botão Voltar (Fora do container) */
+.btn-voltar-site {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: var(--primary-color);
+    color: var(--bg-white);
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    z-index: 10;
+}
+
+.btn-voltar-site:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .auth-showcase { 
+        display: none; 
+    }
+    .auth-form-section {
+        width: 100%;
+        background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2574&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+    }
+    .auth-form-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(18, 18, 18, 0.7);
+        z-index: 1;
+    }
+    .auth-container, .btn-voltar-site {
+        position: relative;
+        z-index: 2;
+    }
+    .auth-container {
+        background: rgba(255, 255, 255, 0.95); /* Fundo semi-transparente no mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-form-section { 
+        padding: 2rem; 
+    }
+    .auth-container { 
+        padding: 2rem; 
+    }
+    .auth-header h1 { 
+        font-size: 2.8rem; 
+    }
+    .btn-voltar-site { 
+        top: 20px; 
+        left: 20px; 
+    }
+}

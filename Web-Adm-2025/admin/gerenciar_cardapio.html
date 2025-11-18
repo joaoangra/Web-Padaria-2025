@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel de gerenciamento do cardápio da Paladar Nobre">
+    <title>Gerenciar Cardápio - Painel Admin</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Estilos Base Consolidados -->
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/admin.css">
+    
+    <!-- Estilos da Página (Cardápio Admin Consolidado) -->
+    <link rel="stylesheet" href="../styles/cardapio_admin.css">
+
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header class="header">
+        <a href="dashboard.html" class="logo" aria-label="Ir para o Dashboard">
+            <img src="../docs/logoPN.png" alt="Logo Paladar Nobre">
+        </a>
+
+        <nav class="navbar" aria-label="Navegação principal">
+            <ul id="admin-nav-list">
+                <li><a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> 
+                    <span>Painel Admin</span>
+                </a></li>
+                <li><a href="gerenciar_cardapio.html" class="nav-link active">
+                    <i class="fas fa-utensils"></i>
+                    <span>Gerenciar Cardápio</span>
+                </a></li>
+                <li><a href="gerenciar_pedidos.html" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Gerenciar Pedidos</span>
+                </a></li>
+                <!-- O menu de usuário/logout será injetado pelo auth.js -->
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Conteúdo Principal -->
+    <main class="admin-container" id="cardapio-admin-container">
+        <h1 class="heading">Gerenciar <span>CARDÁPIO</span></h1>
+        
+        <!-- Formulário de Adição/Edição (Aberto na página) -->
+        <div class="form-add-item">
+            <h3>Adicionar Novo Item</h3>
+            <form id="item-form" class="form-grid" novalidate>
+                <input type="hidden" id="item-id" name="id">
+                
+                <div class="form-group">
+                    <label class="form-label" for="item-nome">Nome do Produto</label>
+                    <input type="text" class="form-control" id="item-nome" name="nome" required placeholder="Ex: Pão Francês">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="item-preco">Preço (R$)</label>
+                    <input type="number" class="form-control" id="item-preco" name="preco" step="0.01" min="0" required placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="item-estoque">Estoque (Qtd)</label>
+                    <input type="number" class="form-control" id="item-estoque" name="qtd_estoque" min="0" required placeholder="100">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="item-categoria">Categoria</label>
+                    <select class="form-control" id="item-categoria" name="categoria" required>
+                        <option value="Geral">Geral</option>
+                        <option value="Pães">Pães</option>
+                        <option value="Doces">Doces</option>
+                        <option value="Salgados">Salgados</option>
+                        <option value="Bebidas">Bebidas</option>
+                    </select>
+                </div>
+                
+                <div class="form-group form-full-width">
+                    <label class="form-label" for="item-imagem">URL da Imagem</label>
+                    <input type="url" class="form-control" id="item-imagem" name="imagem" required placeholder="https://exemplo.com/imagem.jpg">
+                </div>
+
+                <div class="form-group form-full-width">
+                    <label class="form-label" for="item-descricao">Descrição</label>
+                    <textarea class="form-control" id="item-descricao" name="descricao" rows="3" required placeholder="Descrição detalhada do produto"></textarea>
+                </div>
+                
+                <div class="form-group form-full-width">
+                    <button type="submit" class="btn btn-primary btn-submit" id="save-item-btn">
+                        <i class="fas fa-save"></i>
+                        <span>Salvar Item</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filtros e Busca (Usando a estrutura do cardapio_admin.css) -->
+        <div class="filter-container">
+            <h3>Filtros e Busca</h3>
+            <div class="filter-form">
+                <div class="form-group">
+                    <label class="form-label" for="search-input">Buscar por Nome</label>
+                    <input type="text" class="form-control" id="search-input" placeholder="Nome do produto...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="category-filter">Filtrar por Categoria</label>
+                    <select class="form-control" id="category-filter">
+                        <option value="all">Todas as Categorias</option>
+                        <option value="Pães">Pães</option>
+                        <option value="Doces">Doces</option>
+                        <option value="Salgados">Salgados</option>
+                        <option value="Bebidas">Bebidas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="stock-filter">Filtrar por Estoque</label>
+                    <select class="form-control" id="stock-filter">
+                        <option value="all">Todos</option>
+                        <option value="in-stock">Em Estoque</option>
+                        <option value="out-of-stock">Fora de Estoque</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" id="apply-filters-btn">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabela de Produtos -->
+        <div class="admin-table-container">
+            <table class="table admin-table">
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Categoria</th>
+                        <th class="text-center">Estoque</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="cardapio-table-body">
+                    <!-- Itens do cardápio serão injetados aqui pelo admin.js -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal de Edição/Adição (Mantido, mas o formulário principal será usado) -->
+    <!-- Este modal será usado apenas para a função de "Editar" -->
+    <div id="adminModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="modal-title" class="heading">
+                    <span>Editar Item</span>
+                </h2>
+                <button type="button" class="close-admin-modal close" aria-label="Fechar modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </header>
+            <div class="modal-body">
+                <!-- O formulário será preenchido e submetido via JS -->
+                <p>Use o formulário acima para editar o item.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Consolidados -->
+    <script src="../scripts/header.js"></script>
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/admin.js"></script>
+</body>
+</html>

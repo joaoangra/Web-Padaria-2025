@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Padaria Paladar Nobre</title>
+    <link rel="shortcut icon" href="../docs/Imagem/download2.png" type="image/x-icon">
+    <!-- Arquivos CSS Consolidados -->
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/Home.css">
+    <link rel="stylesheet" href="../styles/admin.css">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <a href="dashboard.html" class="logo" aria-label="Ir para o Dashboard">
+            <img src="../docs/logoPN.png" alt="Logo Paladar Nobre">
+        </a>
+
+        <nav class="navbar" aria-label="Navegação principal">
+            <ul id="admin-nav-list">
+                <li><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Painel Admin</a></li>
+                <li><a href="gerenciar_cardapio.html" class="nav-link"><i class="fas fa-utensils"></i> Gerenciar Cardápio</a></li>
+                <li><a href="gerenciar_pedidos.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Gerenciar Pedidos</a></li>
+                <!-- O menu de usuário/logout será injetado pelo auth.js -->
+            </ul>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-faixa">
+            <div class="informacoes-container">
+                <h1 class="titulo">Painel Administrativo</h1>
+                <p class="endereco">Bem-vindo, Administrador. Gerencie o conteúdo da sua padaria.</p>
+            </div>
+        </div>
+    
+        <section class="admin-dashboard">
+            <h2>Visualização</h2>
+            <div class="admin-grid">
+                <a href="../web/visualizar_cardapio.html" class="admin-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>Ver Cardápio Cliente</h3>
+                    <p>Visualize o cardápio como o cliente vê, em tempo real.</p>
+                </a>
+            </div>
+            <h2>Ações Rápidas</h2>
+            <div class="admin-grid">
+                <a href="gerenciar_cardapio.html" class="admin-card">
+                    <i class="fas fa-bread-slice"></i>
+                    <h3>Cardápio</h3>
+                    <p>Adicionar, editar ou remover itens do menu.</p>
+                </a>
+                <a href="gerenciar_pedidos.html" class="admin-card">
+                    <i class="fas fa-receipt"></i>
+                    <h3>Pedidos</h3>
+                    <p>Visualizar e processar pedidos dos clientes.</p>
+                </a>
+                <a href="gerenciar_usuarios.html" class="admin-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Usuários</h3>
+                    <p>Gerenciar contas de clientes e permissões.</p>
+                </a>
+                <a href="ver_mensagens.html" class="admin-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Mensagens</h3>
+                    <p>Ver mensagens enviadas pelo Fale Conosco.</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <!-- Conteúdo do rodapé (Footer) -->
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h2>Padaria Paladar Nobre</h2>
+                <p>Tradição e Sabor desde 2025. Qualidade e acolhimento para todos os clientes.</p>
+            </div>
+            <div class="footer-section contact">
+                <h2>Contato</h2>
+                <p class="contactar">Email: contato@paladarnobre.com</p>
+                <p class="contactar">Número: +55 (19 ) 9 99900-0909</p>
+                <p class="contactar">Endereço: Rua dos Sabores, 1234 - Centro, Cidade Delícia, SP</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/padaria.paladarnobre/" target="_blank" rel="noopener noreferrer" aria-label="Siga-nos no Instagram">
+                        <img src="../docs/Imagem/instagram.png" alt="Instagram">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Padaria Paladar Nobre - Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Arquivos JS Consolidados -->
+    <script src="../scripts/header.js"></script>
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/admin.js"></script>
+</body>
+</html>
