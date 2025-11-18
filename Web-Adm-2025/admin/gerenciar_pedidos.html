@@ -37,55 +37,39 @@
     </div>
 
     <section class="admin-dashboard">
-        <h2>Lista de Pedidos</h2>
-        <p>Esta é a página de gerenciamento de pedidos. Aqui você poderá visualizar, processar e atualizar o status dos pedidos.</p>
-        
-        <!-- Tabela de Pedidos (Estrutura sugerida) -->
-        <div class="admin-table-container">
-            <table class="table admin-table">
+        <div class="admin-pedidos-header" style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;">
+            <i class="fas fa-clipboard-list" style="font-size:2.8rem;color:var(--accent-color);"></i>
+            <h2 style="font-size:2.4rem;font-weight:700;color:var(--accent-color);margin:0;">Lista de Pedidos</h2>
+        </div>
+        <p style="font-size:1.3rem;color:var(--text-secondary);margin-bottom:2rem;">Acompanhe, visualize e processe os pedidos dos clientes de forma rápida e intuitiva.</p>
+        <div class="admin-table-container" style="box-shadow:0 2px 16px rgba(0,0,0,0.08);border-radius:1rem;overflow:hidden;background:var(--background-dark);">
+            <table class="table admin-table" style="border-radius:1rem;overflow:hidden;">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Cliente</th>
-                        <th>Data</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Ações</th>
+                        <th style="width:8%">ID</th>
+                        <th style="width:28%">Cliente</th>
+                        <th style="width:22%">Data</th>
+                        <th style="width:18%">Preço</th>
+                        <th style="width:24%">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="pedidos-table-body">
                     <!-- Pedidos serão injetados aqui -->
-                    <tr>
-                        <td>#001</td>
-                        <td>João da Silva</td>
-                        <td>25/10/2025</td>
-                        <td>R$ 45,50</td>
-                        <td><span class="status-badge status-pending">Pendente</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-action" title="Ver Detalhes"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-primary btn-action" title="Processar"><i class="fas fa-check"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#002</td>
-                        <td>Maria Oliveira</td>
-                        <td>24/10/2025</td>
-                        <td>R$ 120,00</td>
-                        <td><span class="status-badge status-active">Concluído</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-action" title="Ver Detalhes"><i class="fas fa-eye"></i></button>
-                            </div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
         </div>
-
-        <p style="margin-top: 20px; font-size: 1.4rem; color: var(--text-muted);">* As funcionalidades de gerenciamento de pedidos dependem de uma API de backend para armazenamento e processamento de dados.</p>
+        <p style="margin-top: 24px; font-size: 1.2rem; color: var(--text-muted);text-align:right;">* Gerenciamento de pedidos integrado à API do sistema.</p>
     </section>
+
+    <div id="modal-pedido" class="modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center;">
+        <div class="modal-content" style="background:#fff;padding:2rem 2.5rem;border-radius:1rem;max-width:400px;width:90%;box-shadow:0 2px 16px rgba(0,0,0,0.18);position:relative;">
+            <button id="close-modal-pedido" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.8rem;cursor:pointer;color:#888;" title="Fechar">&times;</button>
+            <h3 style="margin-bottom:1.2rem;color:var(--accent-color);font-size:1.6rem;">Detalhes do Pedido</h3>
+            <div id="modal-pedido-info">
+                <!-- Detalhes do pedido serão injetados aqui -->
+            </div>
+        </div>
+    </div>
   </div>
 
   <footer>

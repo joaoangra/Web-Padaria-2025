@@ -1,316 +1,476 @@
-// ==========================================================================
-// Lógica do Painel Administrativo (Dashboard e Gerenciamento de Cardápio)
-// Depende de: auth.js (para verificação de login)
-// ==========================================================================
+// admin.js - Painel Administrativo Padaria Paladar Nobre
+// Todas as funcionalidades via API
+
+const BASE_URL = 'https://api-padaria-seven.vercel.app';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const BASE_URL = 'https://api-padaria-seven.vercel.app';
-    const adminModal = document.getElementById('adminModal');
-    const itemForm = document.getElementById('item-form');
-    const addItemBtn = document.getElementById('add-item-btn');
-    const modalTitle = document.getElementById('modal-title');
-    const tableBody = document.querySelector('.admin-table tbody');
-    
-    // --- Funções de Segurança e Inicialização ---
-    
-    // Verifica se o usuário é admin (a lógica principal está em auth.js)
-    const checkAdmin = async () => {
-        const userDataRaw = localStorage.getItem('userData');
-        let userData = userDataRaw ? JSON.parse(userDataRaw) : null;
+    // cache simples de nomes de clientes por id para evitar fetchs repetidos
+    const clienteNameCache = {};
+    // ===================== SEGURANÇA =====================
+    async function checkAdmin() {
         const token = localStorage.getItem('authToken');
-
-        // Se não há token, bloqueia imediatamente
         if (!token) {
-            alert("Acesso negado. Você precisa estar logado como administrador.");
-            window.location.href = "../../web/cadastro.html";
+            alert('Acesso negado. Você precisa estar logado como administrador.');
+            window.location.href = '../../web/cadastro.html';
             return false;
         }
+        // Aqui pode adicionar verificação extra se quiser
+        return true;
+    }
 
-        // Função utilitária para normalizar e verificar se um objeto representa um admin
-        const isAdminFromObj = (obj) => {
-            if (!obj) return false;
-            const tipo = obj.tipo || obj.TipoUsuario || obj.tipoUsuario || obj.type || obj.role || obj.cargo || null;
-            if (typeof tipo === 'string') {
-                const t = tipo.toLowerCase();
-                if (t.includes('adm') || t === 'admin' || t === 'administrador') return true;
-                if (t.includes('com') || t.includes('cli')) return false;
-            }
-            // se vier id, usuário pode ter tipoUsuarioId
-            if (obj.tipoUsuarioId || obj.TipoUsuarioId || obj.tipo_usuario_id) return 'maybe-id';
-            return false;
-        };
-
-        // Verifica localStorage primeiro
-        const localCheck = isAdminFromObj(userData);
-        if (localCheck === true) return true;
-
-        const BASE_URL = 'https://api-padaria-seven.vercel.app';
-
-        // Tenta extrair id do token
-        const parseJwt = (t) => {
-            try {
-                const base64Url = t.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                return JSON.parse(jsonPayload);
-            } catch (err) { return null; }
-        };
-
+    // ===================== USUÁRIOS =====================
+    async function loadUsuarios() {
+        const usuariosTable = document.getElementById('usuarios-table-body');
+        if (!usuariosTable) return;
+        usuariosTable.innerHTML = '<tr><td colspan="6">Carregando usuários...</td></tr>';
         try {
-            const payload = parseJwt(token);
-            const clienteId = payload && (payload.cliente_id || payload.clienteId || payload.id || payload.userId || payload.sub);
+            const resp = await fetch(`${BASE_URL}/clientes`);
+            if (!resp.ok) throw new Error('Falha ao carregar usuários');
+            let usuarios = await resp.json();
+            if (!Array.isArray(usuarios)) usuarios = Object.values(usuarios);
+            usuariosTable.innerHTML = '';
+            if (!usuarios.length) {
+                usuariosTable.innerHTML = '<tr><td colspan="6">Nenhum usuário encontrado.</td></tr>';
+                return;
+            }
+            usuarios.forEach(usuario => {
+                // Tratar campos alternativos
+                let id = usuario.id || usuario.cliente_id || usuario.usuario_id || '-';
+                let nome = usuario.nome || usuario.name || usuario.usuario || '-';
+                let email = usuario.email || usuario.login || usuario.usuario_email || '-';
+                let tipo = usuario.tipo || usuario.role || usuario.nivel || '-';
+                let criado = usuario.createdAt || usuario.data_criacao || usuario.criado_em || '-';
+                let status = usuario.status || usuario.ativo || usuario.situacao || '-';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${id}</td>
+                    <td>${nome}</td>
+                    <td>${email}</td>
+                    <td>${tipo}</td>
+                    <td>${criado}</td>
+                    <td><span class="status-badge">${status}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-action" data-id="${id}" data-action="ver"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-primary btn-action" data-id="${id}" data-action="editar"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-delete btn-action" data-id="${id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                usuariosTable.appendChild(row);
+            });
+        } catch (err) {
+            usuariosTable.innerHTML = '<tr><td colspan="6">Erro ao carregar usuários.</td></tr>';
+        }
+    }
 
-            // lista de endpoints para tentar recuperar dados do cliente
-            const endpoints = [];
-            if (clienteId) endpoints.push(`${BASE_URL}/clientes/${clienteId}`);
-            endpoints.push(`${BASE_URL}/cliente`);
-            endpoints.push(`${BASE_URL}/cliente/me`);
-            endpoints.push(`${BASE_URL}/clientes/me`);
-
-            // também tenta buscar por email se tivermos em userData
-            if (userData && userData.email) endpoints.push(`${BASE_URL}/clientes?email=${encodeURIComponent(userData.email)}`);
-
-            for (const ep of endpoints) {
+    document.getElementById('usuarios-table-body')?.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        if (action === 'delete') {
+            if (!confirm('Deseja remover este usuário?')) return;
+            try {
+                const resp = await fetch(`${BASE_URL}/clientes/${id}`, { method: 'DELETE' });
+                if (!resp.ok) throw new Error('Falha ao remover usuário');
+                alert('Usuário removido com sucesso.');
+                loadUsuarios();
+            } catch (err) {
+                alert('Erro ao remover usuário.');
+            }
+        } else if (action === 'edit') {
+            const novoNome = prompt('Novo nome para o usuário:');
+            if (novoNome) {
                 try {
-                    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
-                    // se for busca por email pública, não enviar Authorization may not be needed but safe
-                    const resp = await fetch(ep, { headers });
-                    if (!resp.ok) continue;
-                    const d = await resp.json();
-                    const candidate = d.client || d.cliente || d.user || d || {};
-                    // atualiza localStorage
-                    if (candidate && Object.keys(candidate).length) {
-                        userData = candidate;
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                    }
-
-                    const adminCheck = isAdminFromObj(candidate);
-                    if (adminCheck === true) return true;
-
-                    // se retornou 'maybe-id', tenta resolver o id para nome via /tipousuario/{id}
-                    const tipoId = candidate.tipoUsuarioId || candidate.TipoUsuarioId || candidate.tipo_usuario_id || null;
-                    if (tipoId) {
-                        try {
-                            const tipoResp = await fetch(`${BASE_URL}/tipousuario/${tipoId}`, { headers });
-                            if (tipoResp.ok) {
-                                const tipoData = await tipoResp.json();
-                                const tipoObj = tipoData.tipo || tipoData || {};
-                                const nomeTipo = tipoObj.nome || tipoObj.tipo || tipoObj.nomeTipo || null;
-                                if (nomeTipo && String(nomeTipo).toLowerCase().includes('adm')) return true;
-                            }
-                        } catch (err) { /* ignore */ }
-                    }
+                    const resp = await fetch(`${BASE_URL}/clientes/${id}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome: novoNome })
+                    });
+                    if (!resp.ok) throw new Error('Falha ao editar usuário');
+                    alert('Usuário editado com sucesso!');
+                    loadUsuarios();
                 } catch (err) {
-                    // tenta próximo endpoint
-                    console.warn('checkAdmin: endpoint failed', ep, err.message || err);
+                    alert('Erro ao editar usuário.');
                 }
             }
-        } catch (err) {
-            console.warn('checkAdmin: falha ao verificar token/payload', err.message || err);
         }
+    });
 
-        // se chegou aqui, não é admin
-        alert('Acesso negado. Você precisa ser administrador.');
-        window.location.href = '../../web/cadastro.html';
-        return false;
-    };
+    // ===================== PEDIDOS =====================
+    async function loadPedidos() {
+        const pedidosTable = document.getElementById('pedidos-table-body');
+        if (!pedidosTable) return;
+        pedidosTable.innerHTML = '<tr><td colspan="5">Carregando pedidos...</td></tr>';
+        try {
+            const resp = await fetch(`${BASE_URL}/pedidos`);
+            if (!resp.ok) throw new Error('Falha ao carregar pedidos');
+            let pedidos = await resp.json();
+            if (!Array.isArray(pedidos)) pedidos = Object.values(pedidos);
+            // Coletar todos os cliente_id presentes nos pedidos e buscar nomes em paralelo
+            const clienteIds = new Set();
+            pedidos.forEach(p => {
+                const cid = p.cliente_id || p.clienteId || (p.cliente && (p.cliente.id || p.cliente._id || p.cliente.cliente_id)) || (typeof p.cliente === 'string' || typeof p.cliente === 'number' ? p.cliente : null);
+                if (cid) clienteIds.add(String(cid));
+            });
+            const fetchClientes = Array.from(clienteIds).filter(id => !clienteNameCache[id]).map(async id => {
+                try {
+                    const r = await fetch(`${BASE_URL}/clientes/${id}`);
+                    if (r.ok) {
+                        const c = await r.json();
+                        clienteNameCache[id] = c.nome || c.name || c.usuario || c.email || String(id);
+                    } else {
+                        clienteNameCache[id] = String(id);
+                    }
+                } catch (e) {
+                    clienteNameCache[id] = String(id);
+                }
+            });
+            if (fetchClientes.length) await Promise.all(fetchClientes);
+            pedidosTable.innerHTML = '';
+            if (!pedidos.length) {
+                pedidosTable.innerHTML = '<tr><td colspan="5">Nenhum pedido encontrado.</td></tr>';
+                return;
+            }
+            pedidos.forEach(pedido => {
+                let clienteNome = pedido.cliente_nome || (pedido.cliente && pedido.cliente.nome) || pedido.nome_cliente || pedido.nome || null;
+                // Extrair clienteId explicitamente (pode ser string/number ou objeto). Tentamos várias estratégias para não receber null.
+                let clienteIdForRow = null;
+                if (pedido.clienteId) clienteIdForRow = pedido.clienteId;
+                else if (pedido.cliente_id) clienteIdForRow = pedido.cliente_id;
+                else if (pedido.cliente && (pedido.cliente.id || pedido.cliente._id || pedido.cliente.cliente_id)) {
+                    clienteIdForRow = pedido.cliente.id || pedido.cliente._id || pedido.cliente.cliente_id;
+                } else if (typeof pedido.cliente === 'string' || typeof pedido.cliente === 'number') {
+                    clienteIdForRow = pedido.cliente;
+                }
+                // Se ainda não encontramos, varrer outras chaves que possam conter o id do cliente
+                if (!clienteIdForRow) {
+                    for (const k of Object.keys(pedido)) {
+                        if (/cliente(_?id)?$/i.test(k) || /^clienteid$/i.test(k)) {
+                            const val = pedido[k];
+                            if (val && (typeof val === 'string' || typeof val === 'number')) {
+                                clienteIdForRow = val; break;
+                            }
+                            if (val && typeof val === 'object') {
+                                clienteIdForRow = val.id || val._id || val.cliente_id || null;
+                                if (clienteIdForRow) break;
+                            }
+                        }
+                        // também aceitar chaves que terminem em _id e contenham 'cliente'
+                        if (/_id$/i.test(k) && /cliente/i.test(k) && !clienteIdForRow) {
+                            const val = pedido[k];
+                            if (val && (typeof val === 'string' || typeof val === 'number')) { clienteIdForRow = val; break; }
+                        }
+                    }
+                }
+                // Exibir nome preferencialmente do cache, senão do objeto, senão id, senão '-'.
+                const displayCliente = (clienteIdForRow && clienteNameCache[String(clienteIdForRow)]) || clienteNome || (clienteIdForRow ? String(clienteIdForRow) : '-');
+                // Preço: usar subtotal do banco
+                let preco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+                if (!preco && Array.isArray(pedido.itens)) {
+                    preco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+                }
+                let dataPedido = pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${pedido.pedido_id || pedido.id || '-'}</td>
+                    <td>${displayCliente}</td>
+                    <td>${dataPedido}</td>
+                    <td>R$ ${preco ? Number(preco).toFixed(2).replace('.', ',') : '-'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="ver" title="Ver"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-primary btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="processar" title="Processar"><i class="fas fa-check"></i></button>
+                            <button class="btn btn-delete btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="delete" title="Remover"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                // Salva pedido no atributo do elemento para abrir no modal e armazena o id do cliente separadamente
+                try { row.dataset.pedido = JSON.stringify(pedido); } catch (e) { row.dataset.pedido = '{}'; }
+                row.dataset.clienteId = clienteIdForRow ? String(clienteIdForRow) : '';
+                pedidosTable.appendChild(row);
+            });
+        } catch (err) {
+            pedidosTable.innerHTML = '<tr><td colspan="5">Erro ao carregar pedidos.</td></tr>';
+        }
+    }
 
-    // --- Funções do Modal ---
+    document.getElementById('pedidos-table-body')?.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        if (action === 'delete') {
+            if (!confirm('Deseja remover este pedido?')) return;
+            try {
+                const resp = await fetch(`${BASE_URL}/pedidos/${id}`, { method: 'DELETE' });
+                if (!resp.ok) throw new Error('Falha ao remover pedido');
+                alert('Pedido removido com sucesso.');
+                loadPedidos();
+            } catch (err) {
+                alert('Erro ao remover pedido.');
+            }
+        } else if (action === 'ver') {
+            // Abrir modal com os detalhes do pedido (sem status)
+            const tr = btn.closest('tr');
+            if (!tr) return;
+            let pedido = {};
+            try { pedido = JSON.parse(tr.dataset.pedido || '{}'); } catch (e) { pedido = {}; }
+            // Se preferir, pode buscar o pedido atualizado na API aqui — por enquanto usamos os dados carregados.
+            const modal = document.getElementById('modal-pedido');
+            const modalInfo = document.getElementById('modal-pedido-info');
+            if (!modal || !modalInfo) {
+                alert('Detalhes do pedido:\n' + JSON.stringify(pedido, null, 2));
+                return;
+            }
+            // Preço — usar subtotal se existir
+            let modalPreco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+            if (!modalPreco && Array.isArray(pedido.itens)) {
+                modalPreco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+            }
+            // Buscar nome do cliente pelo id se necessário — priorizamos o id gravado na linha (data-cliente-id)
+            let clienteNomeModal = pedido.cliente_nome || (pedido.cliente && pedido.cliente.nome) || pedido.nome_cliente || pedido.nome || null;
+            let clienteIdParaBusca = tr?.dataset?.clienteId || null;
+            if (!clienteIdParaBusca) {
+                // ainda tentar recuperar do objeto pedido
+                clienteIdParaBusca = pedido.clienteId || pedido.cliente_id || (pedido.cliente && (pedido.cliente.id || pedido.cliente._id)) || null;
+            }
+            if (!clienteNomeModal && clienteIdParaBusca) {
+                // se for objeto, extrai id
+                if (typeof clienteIdParaBusca === 'object') {
+                    clienteIdParaBusca = clienteIdParaBusca.id || clienteIdParaBusca._id || null;
+                }
+                // Primeiro verificar cache
+                if (clienteIdParaBusca && clienteNameCache[String(clienteIdParaBusca)]) {
+                    clienteNomeModal = clienteNameCache[String(clienteIdParaBusca)];
+                }
+                if (clienteIdParaBusca && (typeof clienteIdParaBusca === 'string' || typeof clienteIdParaBusca === 'number')) {
+                    try {
+                        const respCliente = await fetch(`${BASE_URL}/clientes/${clienteIdParaBusca}`);
+                        if (respCliente.ok) {
+                            const clienteObj = await respCliente.json();
+                            clienteNomeModal = clienteObj.nome || clienteObj.name || clienteObj.usuario || clienteObj.email || String(clienteIdParaBusca);
+                        } else {
+                            clienteNomeModal = String(clienteIdParaBusca);
+                        }
+                    } catch (e) {
+                        clienteNomeModal = String(clienteIdParaBusca);
+                    }
+                }
+            }
+            // Garantia de valor a exibir
+            clienteNomeModal = clienteNomeModal || (clienteIdParaBusca ? String(clienteIdParaBusca) : '-') ;
+            modalInfo.innerHTML = `
+                <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:1.05rem;color:var(--text-primary);">
+                    <div><strong>ID:</strong> ${pedido.pedido_id || pedido.id || '-'}</div>
+                    <div><strong>Cliente:</strong> ${clienteNomeModal}</div>
+                    <div><strong>Data:</strong> ${pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-'}</div>
+                    <div><strong>Preço:</strong> R$ ${modalPreco ? Number(modalPreco).toFixed(2).replace('.', ',') : '-'}</div>
+                </div>
+            `;
+            modal.style.display = 'flex';
+        } else if (action === 'processar') {
+            try {
+                const resp = await fetch(`${BASE_URL}/pedidos/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'Processado' })
+                });
+                if (!resp.ok) throw new Error('Falha ao processar pedido');
+                alert('Pedido processado com sucesso!');
+                loadPedidos();
+            } catch (err) {
+                alert('Erro ao processar pedido.');
+            }
+        }
+    });
 
-    const openModal = (isEditing = false) => {
-        if (!adminModal) return;
-        adminModal.classList.add('show');
-        document.body.classList.add('modal-open');
-        adminModal.setAttribute('aria-hidden', 'false');
-        // Foca no primeiro campo do formulário
-        setTimeout(() => document.getElementById('item-nome')?.focus(), 50);
-    };
+    // Fechar modal de pedido (botão e clique fora)
+    const modalCloseBtn = document.getElementById('close-modal-pedido');
+    const modalPedidoEl = document.getElementById('modal-pedido');
+    if (modalCloseBtn && modalPedidoEl) {
+        modalCloseBtn.addEventListener('click', () => { modalPedidoEl.style.display = 'none'; });
+        modalPedidoEl.addEventListener('click', (ev) => { if (ev.target === modalPedidoEl) modalPedidoEl.style.display = 'none'; });
+    }
 
-    const closeModal = () => {
-        if (!adminModal) return;
-        adminModal.classList.remove('show');
-        document.body.classList.remove('modal-open');
-        adminModal.setAttribute('aria-hidden', 'true');
-        itemForm?.reset();
-        document.getElementById('item-id').value = '';
-        document.getElementById('image-preview').src = '';
-        document.getElementById('image-preview').classList.add('hidden');
-    };
+    // ===================== ESTOQUE =====================
+    async function loadEstoque() {
+        const estoqueTable = document.getElementById('estoque-table-body');
+        if (!estoqueTable) return;
+        estoqueTable.innerHTML = '<tr><td colspan="5">Carregando estoque...</td></tr>';
+        try {
+            const resp = await fetch(`${BASE_URL}/estoque`);
+            if (!resp.ok) throw new Error('Falha ao carregar estoque');
+            let estoque = await resp.json();
+            if (!Array.isArray(estoque)) estoque = Object.values(estoque);
+            estoqueTable.innerHTML = '';
+            if (!estoque.length) {
+                estoqueTable.innerHTML = '<tr><td colspan="5">Nenhum movimento encontrado.</td></tr>';
+                return;
+            }
+            estoque.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.estoque_id || item.id || '-'}</td>
+                    <td>${item.produto_id || '-'}</td>
+                    <td>${item.movimento || '-'}</td>
+                    <td>${item.quantidade || '-'}</td>
+                    <td>${item.data || '-'}</td>
+                `;
+                estoqueTable.appendChild(row);
+            });
+        } catch (err) {
+            estoqueTable.innerHTML = '<tr><td colspan="5">Erro ao carregar estoque.</td></tr>';
+        }
+    }
 
-    // --- Funções de Gerenciamento de Cardápio ---
 
-    const loadCardapio = async () => {
+    // ===================== CARDÁPIO CRUD =====================
+    const tableBody = document.getElementById('cardapio-table-body');
+    async function loadCardapio(filtros = {}) {
         if (!tableBody) return;
         tableBody.innerHTML = '<tr><td colspan="8" class="text-center">Carregando cardápio...</td></tr>';
-
         try {
             const response = await fetch(`${BASE_URL}/produtos`);
             if (!response.ok) throw new Error('Falha ao carregar produtos');
-            const cardapio = await response.json();
-            renderCardapioTable(cardapio);
+            let cardapio = await response.json();
+            if (!Array.isArray(cardapio)) cardapio = Object.values(cardapio);
+            // Filtros: nome, categoria, estoque
+            if (filtros.nome) {
+                cardapio = cardapio.filter(item => item.nome && item.nome.toLowerCase().includes(filtros.nome.toLowerCase()));
+            }
+            if (filtros.categoria && filtros.categoria !== 'all') {
+                cardapio = cardapio.filter(item => item.categoria === filtros.categoria);
+            }
+            if (filtros.estoque === 'in-stock') {
+                cardapio = cardapio.filter(item => item.qtd_estoque > 0);
+            } else if (filtros.estoque === 'out-of-stock') {
+                cardapio = cardapio.filter(item => item.qtd_estoque <= 0);
+            }
+            tableBody.innerHTML = '';
+            if (!cardapio.length) {
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center">Nenhum item encontrado.</td></tr>';
+                return;
+            }
+            cardapio.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="${item.imagem || ''}" alt="${item.nome || ''}" style="max-width:60px;max-height:60px;border-radius:8px;"></td>
+                    <td>${item.nome || '-'}</td>
+                    <td>R$ ${item.preco ? Number(item.preco).toFixed(2).replace('.', ',') : '-'}</td>
+                    <td>${item.categoria || '-'}</td>
+                    <td class="text-center">${item.qtd_estoque ?? '-'}</td>
+                    <td class="text-center">
+                        <button class="btn btn-edit btn-action" data-id="${item.id || item.produto_id}" data-action="edit"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-delete btn-action" data-id="${item.id || item.produto_id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                row.dataset.item = JSON.stringify(item);
+                tableBody.appendChild(row);
+            });
         } catch (error) {
-            console.error('Erro ao carregar cardápio:', error);
             tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Erro ao carregar cardápio.</td></tr>';
         }
-    };
+    }
 
-    const renderCardapioTable = (cardapio) => {
-        tableBody.innerHTML = '';
-        if (cardapio.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">Nenhum item no cardápio.</td></tr>';
-            return;
-        }
+    document.getElementById('apply-filters-btn')?.addEventListener('click', () => {
+        const nome = document.getElementById('search-input')?.value || '';
+        const categoria = document.getElementById('category-filter')?.value || 'all';
+        const estoque = document.getElementById('stock-filter')?.value || 'all';
+        loadCardapio({ nome, categoria, estoque });
+    });
 
-        cardapio.forEach(item => {
-            const row = tableBody.insertRow();
-            const precoFormatado = parseFloat(item.preco).toFixed(2).replace('.', ',');
-            const estoqueStatus = item.qtd_estoque > 0 ? `<span class="status-badge status-active">Em Estoque</span>` : `<span class="status-badge status-inactive">Esgotado</span>`;
-
-            row.innerHTML = `
-                <td>${item.produto_id}</td>
-                <td><img src="${item.imagem}" alt="${item.nome}" class="img-thumbnail"></td>
-                <td>${item.nome}</td>
-                <td>${item.categoria || 'N/A'}</td>
-                <td>R$ ${precoFormatado}</td>
-                <td>${item.qtd_estoque}</td>
-                <td>${estoqueStatus}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-edit btn-action" data-id="${item.produto_id}" data-action="edit"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-delete btn-action" data-id="${item.produto_id}" data-action="delete"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                </td>
-            `;
-        });
-    };
-
-    const editItem = async (id) => {
+    // Adicionar/Editar item
+    const itemForm = document.getElementById('item-form');
+    itemForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = itemForm['id'].value;
+        const body = {
+            nome: itemForm['nome'].value,
+            preco: Number(itemForm['preco'].value),
+            qtd_estoque: Number(itemForm['qtd_estoque'].value),
+            imagem: itemForm['imagem'].value,
+            descricao: itemForm['descricao'].value
+        };
         try {
-            const response = await fetch(`${BASE_URL}/produtos/${id}`);
-            if (!response.ok) throw new Error('Item não encontrado');
-            const item = await response.json();
-
-            modalTitle.textContent = 'Editar Item: ' + item.nome;
-            document.getElementById('item-id').value = item.produto_id;
-            document.getElementById('item-nome').value = item.nome;
-            document.getElementById('item-descricao').value = item.descricao;
-            document.getElementById('item-preco').value = item.preco;
-            document.getElementById('item-categoria').value = item.categoria;
-            document.getElementById('item-estoque').value = item.qtd_estoque;
-            document.getElementById('item-imagem').value = item.imagem;
-            
-            const preview = document.getElementById('image-preview');
-            preview.src = item.imagem;
-            preview.classList.remove('hidden');
-
-            openModal(true);
-        } catch (error) {
-            alert('Erro ao carregar dados para edição: ' + error.message);
+            let resp;
+            // Validação rápida dos campos obrigatórios
+                if (!body.nome || body.preco === '' || body.qtd_estoque === '' || !body.imagem || !body.descricao) {
+                    alert('Preencha todos os campos obrigatórios!');
+                    return;
+                }
+            // POST para adicionar novo produto
+            if (!id) {
+                resp = await fetch(`${BASE_URL}/produtos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+            } else {
+                // PATCH para editar produto
+                resp = await fetch(`${BASE_URL}/produtos/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+            }
+            if (!resp.ok) {
+                const errMsg = await resp.text();
+                alert('Erro ao salvar item: ' + errMsg);
+                return;
+            }
+            itemForm.reset();
+            loadCardapio();
+        } catch (err) {
+            alert('Erro ao salvar item: ' + (err.message || err));
         }
-    };
+    });
 
-    const deleteItem = async (id) => {
-        if (!confirm('Tem certeza que deseja remover este item do cardápio?')) return;
-
-        try {
-            // Chamada real à API para DELETE
-            const response = await fetch(`${BASE_URL}/produtos/${id}`, { method: 'DELETE' });
-            if (!response.ok) throw new Error('Falha ao remover item');
-            
-            alert('Item removido com sucesso.');
-            loadCardapio(); // Recarrega a lista
-        } catch (error) {
-            alert('Erro ao remover item: ' + error.message);
+    // Editar/Excluir item
+    tableBody?.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        const tr = btn.closest('tr');
+        const item = tr ? JSON.parse(tr.dataset.item || '{}') : {};
+        if (action === 'edit') {
+            // Preencher formulário com dados do item
+            itemForm['id'].value = item.id || item.produto_id || '';
+            itemForm['nome'].value = item.nome || '';
+            itemForm['preco'].value = item.preco || '';
+            itemForm['qtd_estoque'].value = item.qtd_estoque || '';
+            itemForm['categoria'].value = item.categoria || 'Geral';
+            itemForm['imagem'].value = item.imagem || '';
+            itemForm['descricao'].value = item.descricao || '';
+            window.scrollTo({ top: itemForm.offsetTop - 40, behavior: 'smooth' });
+        } else if (action === 'delete') {
+            if (!confirm('Deseja remover este item do cardápio?')) return;
+            try {
+                const resp = await fetch(`${BASE_URL}/produtos/${id}`, { method: 'DELETE' });
+                if (!resp.ok) throw new Error('Erro ao remover item');
+                loadCardapio();
+            } catch (err) {
+                alert('Erro ao remover item.');
+            }
         }
-    };
+    });
 
-    // --- Event Listeners ---
-
-    // Inicialização da página (checkAdmin agora é async)
+    // ========== Inicialização das páginas ========== 
     if (window.location.pathname.includes('gerenciar_cardapio.html')) {
         checkAdmin().then(isOk => {
             if (isOk) loadCardapio();
         });
+    } else if (window.location.pathname.includes('gerenciar_pedidos.html')) {
+        checkAdmin().then(isOk => {
+            if (isOk) loadPedidos();
+        });
+    } else if (window.location.pathname.includes('gerenciar_usuarios.html')) {
+        checkAdmin().then(isOk => {
+            if (isOk) loadUsuarios();
+        });
     } else if (window.location.pathname.includes('dashboard.html')) {
-        checkAdmin(); // Apenas verifica o login para o dashboard
+        checkAdmin();
     }
-
-    // Botão Adicionar Item
-    addItemBtn?.addEventListener('click', () => {
-        modalTitle.textContent = 'Adicionar Novo Item';
-        closeModal(); // Reseta o formulário
-        openModal();
-    });
-
-    // Submissão do Formulário
-    itemForm?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const id = document.getElementById('item-id').value;
-        const nome = document.getElementById('item-nome').value;
-        const descricao = document.getElementById('item-descricao').value;
-        const preco = parseFloat(document.getElementById('item-preco').value);
-        const categoria = document.getElementById('item-categoria').value;
-        const qtd_estoque = parseInt(document.getElementById('item-estoque').value);
-        const imagem = document.getElementById('item-imagem').value;
-        
-        const itemData = { nome, descricao, preco, categoria, qtd_estoque, imagem };
-        
-        try {
-            let method = id ? 'PATCH' : 'POST'; // A API usa PATCH para atualização
-            let url = id ? `${BASE_URL}/produtos/${id}` : `${BASE_URL}/produtos`;
-            
-            // Chamada real à API para POST/PATCH
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(itemData)
-            });
-            if (!response.ok) throw new Error('Falha ao salvar item');
-            
-            alert(`Item ${id ? 'editado' : 'adicionado'} com sucesso.`);
-            closeModal();
-            loadCardapio();
-        } catch (error) {
-            alert('Erro ao salvar item: ' + error.message);
-        }
-    });
-
-    // Delegação de eventos para botões de ação na tabela
-    tableBody?.addEventListener('click', (e) => {
-        const target = e.target.closest('button[data-action]');
-        if (!target) return;
-
-        const id = parseInt(target.dataset.id);
-        const action = target.dataset.action;
-
-        if (action === 'edit') {
-            editItem(id);
-        } else if (action === 'delete') {
-            deleteItem(id);
-        }
-    });
-
-    // Fechar modal pelo botão X
-    document.querySelector('.close-modal')?.addEventListener('click', closeModal);
-    
-    // Fechar modal pelo overlay
-    adminModal?.addEventListener('click', (e) => {
-        if (e.target === adminModal) {
-            closeModal();
-        }
-    });
-    
-    // Preview da imagem no formulário
-    document.getElementById('item-imagem')?.addEventListener('input', (e) => {
-        const preview = document.getElementById('image-preview');
-        if (e.target.value) {
-            preview.src = e.target.value;
-            preview.classList.remove('hidden');
-        } else {
-            preview.classList.add('hidden');
-        }
-    });
 });
