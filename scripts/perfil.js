@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- VARIÁVEIS E ELEMENTOS ---
     const token = localStorage.getItem('authToken');
     const form = document.getElementById('perfil-form');
     const inputs = form.querySelectorAll('input:not([type="email"])');
@@ -8,10 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelButton = document.getElementById('cancel-button');
     let originalUserData = {};
 
-    // Elementos do Tema
     const themeRadios = document.querySelectorAll('input[name="theme"]');
 
-    // --- LÓGICA DAS ABAS ---
     const tabs = document.querySelectorAll('.perfil-nav-item');
     const tabContents = document.querySelectorAll('.perfil-content');
     tabs.forEach(tab => {
@@ -23,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- PROTEÇÃO E CARREGAMENTO DE DADOS ---
     if (!token) {
         alert("Você precisa estar logado para acessar esta página.");
         window.location.href = "/web/cadastro.html";
@@ -47,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('endereco').value = data.endereco || '';
     }
 
-    // --- LÓGICA DE EDIÇÃO E SALVAMENTO ---
     function alternarModoEdicao(isEditing) {
         inputs.forEach(input => input.readOnly = !isEditing);
         editButton.style.display = isEditing ? 'none' : 'block';
@@ -74,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         try {
             const response = await fetch(`https://api-padaria-seven.vercel.app/clientes/${clienteId}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -96,4 +91,98 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+});
+
+// Função para excluir e anterar dados da conta
+
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('authToken');
+    const senhaForm = document.getElementById('senha-form');
+    const btnExcluir = document.querySelector('.btn-excluir');
+
+    if (!token) {
+        alert("Você precisa estar logado para acessar esta página.");
+        window.location.href = "/web/cadastro.html";
+        return;
+    }
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const clienteId = payload.cliente_id || payload.id || payload.userId;
+
+    if (!clienteId) {
+        alert("Erro: ID do cliente não encontrado no token.");
+        return;
+    }
+
+    senhaForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const senhaAtual = document.getElementById('senha-atual').value.trim();
+        const novaSenha = document.getElementById('nova-senha').value.trim();
+        const confirmaSenha = document.getElementById('confirma-senha').value.trim();
+
+        if (!senhaAtual || !novaSenha || !confirmaSenha) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        if (novaSenha !== confirmaSenha) {
+            alert("A nova senha e a confirmação não coincidem.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://api-padaria-seven.vercel.app/clientes/${clienteId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer `
+                },
+                body: JSON.stringify({
+                    senhaAtual,
+                    novaSenha
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Falha ao alterar a senha.');
+            }
+
+            alert("Senha alterada com sucesso!");
+            senhaForm.reset();
+
+        } catch (error) {
+            console.error("Erro ao alterar senha:", error);
+            alert(error.message);
+        }
+    });
+
+    btnExcluir.addEventListener('click', async () => {
+        const confirmacao = confirm("Tem certeza que deseja excluir sua conta? Esta ação é permanente!");
+        if (!confirmacao) return;
+
+        try {
+            const response = await fetch(`https://api-padaria-seven.vercel.app/clientes/${clienteId}`, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Falha ao excluir conta.');
+            }
+
+            alert("Conta excluída com sucesso. Sentiremos sua falta!");
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = "/web/cadastro.html";
+
+        } catch (error) {
+            console.error("Erro ao excluir conta:", error);
+            alert(error.message);
+        }
+    });
 });
