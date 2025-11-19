@@ -211,7 +211,12 @@
 }
 
 .dropdown-menu {
-    display: none;
+    /* Hidden by default for better control (supports hover and JS toggle for touch) */
+    display: block; /* keep in flow so transitions run predictably */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
     position: absolute;
     top: calc(var(--header-height) - 8px);
     right: 0;
@@ -225,8 +230,12 @@
     z-index: 1200;
 }
 
-.user-menu:hover .dropdown-menu {
-    display: block;
+/* Show on hover (desktop) or when .open is added (JS, for touch devices) */
+.user-menu:hover .dropdown-menu,
+.user-menu.open .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .dropdown-menu li {

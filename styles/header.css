@@ -29,7 +29,12 @@ nav ul li.user-menu a::after {
 }
 
 .dropdown-menu {
-    display: none;
+    /* Hidden by default; reveal on hover or when .open is toggled by JS */
+    display: block; /* keep in flow for transitions */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
     position: absolute;
     top: 100%;
     right: 0;
@@ -45,8 +50,11 @@ nav ul li.user-menu a::after {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.user-menu:hover .dropdown-menu {
-    display: flex;
+.user-menu:hover .dropdown-menu,
+.user-menu.open .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .user-menu:hover .user-welcome .fa-cog {

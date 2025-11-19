@@ -18,6 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Filters state
+    const filtros = {
+        estoque: 'all', // 'all' | 'disponivel' | 'indisponivel'
+        busca: ''
+    };
+
+    function aplicarFiltros() {
+        let produtosFiltrados = cardapio.slice();
+        const busca = filtros.busca.toLowerCase().trim();
+        if (busca) {
+            produtosFiltrados = produtosFiltrados.filter(p => (p.nome || '').toLowerCase().includes(busca));
+        }
+        if (filtros.estoque === 'disponivel') {
+            produtosFiltrados = produtosFiltrados.filter(p => Number(p.qtd_estoque) > 0);
+        } else if (filtros.estoque === 'indisponivel') {
+            produtosFiltrados = produtosFiltrados.filter(p => Number(p.qtd_estoque) <= 0 || p.qtd_estoque === undefined || p.qtd_estoque === null);
+        }
+        renderizarCardapio(produtosFiltrados);
+    }
+
     function renderizarCardapio(produtos) {
         container.innerHTML = '';
         produtos.forEach(produto => {
@@ -108,10 +128,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cartButtonHeader) {
         cartButtonHeader.addEventListener('click', abrirCarrinho);
     }
+    // Search input integrates with filtros.busca and reapplies filters
     searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const produtosFiltrados = cardapio.filter(p => p.nome.toLowerCase().includes(searchTerm));
-        renderizarCardapio(produtosFiltrados);
+        filtros.busca = searchInput.value || '';
+        aplicarFiltros();
+    });
+
+    // Filter buttons (Todos / Disponível / Indisponível)
+    const filterButtons = document.querySelectorAll('.filter-buttons button');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const f = btn.dataset.filter;
+            if (f === 'all') filtros.estoque = 'all';
+            else if (f === 'disponivel') filtros.estoque = 'disponivel';
+            else if (f === 'indisponivel') filtros.estoque = 'indisponivel';
+            aplicarFiltros();
+        });
     });
     closeBtn.onclick = () => modal.style.display = 'none';
     window.onclick = e => {

@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
 
       userMenuContainer.insertAdjacentHTML('beforeend', userMenuHTML);
-
       const logoutButton = document.getElementById('logout-button');
       if (logoutButton) {
         logoutButton.addEventListener('click', (e) => {
@@ -53,6 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.removeItem('userData');
           // volta para a página de login (usando caminho calculado)
           window.location.href = loginHref;
+        });
+      }
+
+      // Accessibility / Touch: toggle dropdown on click for touch devices
+      const userMenuEl = userMenuContainer.querySelector('.user-menu');
+      const userWelcome = userMenuEl?.querySelector('.user-welcome');
+      if (userWelcome && userMenuEl) {
+        userWelcome.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          userMenuEl.classList.toggle('open');
+        });
+        // close when clicking outside
+        document.addEventListener('click', (ev) => {
+          if (!userMenuEl.contains(ev.target)) {
+            userMenuEl.classList.remove('open');
+          }
         });
       }
     } else {
