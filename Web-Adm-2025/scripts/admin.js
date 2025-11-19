@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('authToken');
         if (!token) {
             alert('Acesso negado. Você precisa estar logado como administrador.');
-            window.location.href = '../../web/cadastro.html';
+            window.location.href = '/web/cadastro.html';
             return false;
         }
         // Aqui pode adicionar verificação extra se quiser
@@ -22,15 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadUsuarios() {
         const usuariosTable = document.getElementById('usuarios-table-body');
         if (!usuariosTable) return;
-        usuariosTable.innerHTML = '<tr><td colspan="6">Carregando usuários...</td></tr>';
+        // A tabela tem 5 colunas (ID, Nome, Email, Nível, Ações)
+        usuariosTable.innerHTML = '<tr><td colspan="5">Carregando usuários...</td></tr>';
         try {
-            const resp = await fetch(`${BASE_URL}/clientes`);
-            if (!resp.ok) throw new Error('Falha ao carregar usuários');
+            // Incluir token se presente (alguns backends exigem Authorization)
+            const token = localStorage.getItem('authToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const resp = await fetch(`${BASE_URL}/clientes`, { headers });
+            if (!resp.ok) {
+                // Tentar extrair mensagem do corpo para diagnóstico
+                let bodyText = '';
+                try { bodyText = await resp.text(); } catch (e) { bodyText = ''; }
+                throw new Error(`Falha ao carregar usuários. URL: ${BASE_URL}/clientes | HTTP ${resp.status} ${resp.statusText} | ${bodyText}`);
+            }
             let usuarios = await resp.json();
             if (!Array.isArray(usuarios)) usuarios = Object.values(usuarios);
             usuariosTable.innerHTML = '';
             if (!usuarios.length) {
-                usuariosTable.innerHTML = '<tr><td colspan="6">Nenhum usuário encontrado.</td></tr>';
+                usuariosTable.innerHTML = '<tr><td colspan="5">Nenhum usuário encontrado.</td></tr>';
                 return;
             }
             usuarios.forEach(usuario => {
@@ -42,25 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 let criado = usuario.createdAt || usuario.data_criacao || usuario.criado_em || '-';
                 let status = usuario.status || usuario.ativo || usuario.situacao || '-';
                 const row = document.createElement('tr');
+                // Renderizar somente as 5 colunas previstas no cabeçalho
+                // Exibir apenas o botão de exclusão conforme solicitação
                 row.innerHTML = `
                     <td>${id}</td>
                     <td>${nome}</td>
                     <td>${email}</td>
-                    <td>${tipo}</td>
-                    <td>${criado}</td>
-                    <td><span class="status-badge">${status}</span></td>
+                    <td><span class="status-badge">${tipo}</span></td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-edit btn-action" data-id="${id}" data-action="ver"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-primary btn-action" data-id="${id}" data-action="editar"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-delete btn-action" data-id="${id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-delete btn-action" data-id="${id}" data-action="delete" title="Remover"><i class="fas fa-trash"></i></button>
                         </div>
                     </td>
                 `;
                 usuariosTable.appendChild(row);
             });
         } catch (err) {
-            usuariosTable.innerHTML = '<tr><td colspan="6">Erro ao carregar usuários.</td></tr>';
+            console.error('Erro ao carregar usuários:', err);
+            // Mostrar mensagem de erro detalhada na UI (resumida)
+            const msg = String(err.message || err).slice(0, 500); // limitar tamanho exibido
+            usuariosTable.innerHTML = `
+                <tr>
+                    <td colspan="5">Erro ao carregar usuários: <strong>${msg}</strong>
+                        <div style="margin-top:.5rem;"><button id="retry-load-usuarios" class="btn">Tentar novamente</button>
+                        <button id="show-full-error" class="btn">Mostrar no Console</button></div>
+                    </td>
+                </tr>
+            `;
+            document.getElementById('retry-load-usuarios')?.addEventListener('click', () => loadUsuarios());
+            document.getElementById('show-full-error')?.addEventListener('click', () => console.log(err));
         }
     }
 

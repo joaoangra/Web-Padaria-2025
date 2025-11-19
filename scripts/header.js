@@ -15,8 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let loginHref = 'cadastro.html';
     // se estiver nas páginas admin (Web-Adm-2025), ajusta os caminhos para apontar para /web/
     if (pathname.includes('/Web-Adm-2025/') || pathname.includes('/Web-Adm-2025\\')) {
-      profileHref = '../../web/perfil.html';
-      loginHref = '../../web/cadastro.html';
+      // use absolute paths so links work from GitHub Pages irrespective of current folder
+      profileHref = '/web/perfil.html';
+      loginHref = '/web/cadastro.html';
     } else if (pathname.includes('/web/') || pathname.includes('/web\\')) {
       profileHref = 'perfil.html';
       loginHref = 'cadastro.html';
