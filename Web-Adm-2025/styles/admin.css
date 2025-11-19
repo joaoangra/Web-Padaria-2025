@@ -16,15 +16,16 @@ main {
 
 /* ==== FAIXA DE BOAS-VINDAS (Dashboard) ==== */
 .admin-faixa {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    color: var(--bg-white);
-    padding: 3rem;
+    /* banner suave e menos chamativo */
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+    color: var(--text-light);
+    padding: 2.5rem;
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    margin-bottom: 3rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2.5rem;
     position: relative;
     overflow: hidden;
-    height: 200px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,9 +37,9 @@ main {
 }
 
 .admin-faixa .titulo {
-    font-size: 3.5rem;
+    font-size: 3rem;
     margin-bottom: 0.5rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: none;
 }
 
 .admin-faixa .endereco {
@@ -50,9 +51,9 @@ main {
 /* ==== DASHBOARD PRINCIPAL ==== */
 .admin-dashboard {
     background-color: var(--bg-white);
-    padding: 3rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    padding: 2.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .admin-dashboard h2 {
@@ -75,38 +76,23 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 2.5rem;
-    background-color: var(--bg-light);
+    padding: 2rem;
+    background-color: var(--bg-white);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-normal), box-shadow var(--transition-normal);
     text-decoration: none;
     color: var(--text-dark);
 }
-
 .admin-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    background-color: var(--bg-white);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
-
 .admin-card i {
-    font-size: 3.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
+    font-size: 3rem;
+    color: rgba(43, 111, 134, 0.9);
+    margin-bottom: 1rem;
 }
-
-.admin-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-}
-
-.admin-card p {
-    font-size: 1.4rem;
-    color: var(--text-muted);
-}
-
 /* ==== TABELAS (Reutiliza estilos de global.css) ==== */
 .table-responsive {
     overflow-x: auto;
@@ -120,28 +106,24 @@ main {
 }
 
 .btn-action {
-    padding: 0.5rem 0.8rem;
-    border-radius: var(--radius-sm);
-    font-size: 1.4rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 6px;
+    font-size: 1.3rem;
     cursor: pointer;
     border: none;
     transition: all var(--transition-normal);
 }
-
 .btn-edit {
     background-color: var(--primary-color);
-    color: var(--bg-white);
+    color: var(--text-light);
 }
-
 .btn-edit:hover {
     background-color: var(--primary-hover);
 }
-
 .btn-delete {
     background-color: var(--error);
-    color: var(--bg-white);
+    color: var(--text-light);
 }
-
 .btn-delete:hover {
     background-color: #dc2626;
 }
