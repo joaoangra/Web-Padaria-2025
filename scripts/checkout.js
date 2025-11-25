@@ -40,7 +40,7 @@ function atualizarResumo() {
 
     if (!resumoItens || !subtotalEl || !totalFinalEl || !taxaEntregaEl) return;
 
-    let subtotal = carrinho.reduce((acc, item) => acc + item.total, 0);
+    let subtotalItens = carrinho.reduce((acc, item) => acc + item.total, 0);
     resumoItens.innerHTML = carrinho.map(item => `
         <div class="item-resumo">
             <span>${item.quantidade}x ${item.nome}</span>
@@ -50,7 +50,16 @@ function atualizarResumo() {
 
     const entregaSelecionada = document.getElementById('entrega').checked;
     const taxaEntrega = entregaSelecionada ? 5.00 : 0.00;
-    const total = subtotal + taxaEntrega;
+    if (entregaSelecionada) {
+        resumoItens.innerHTML += `
+            <div class="item-resumo">
+                <span>Taxa de Entrega</span>
+                <span>R$ 5,00</span>
+            </div>
+        `;
+    }
+    let subtotal = subtotalItens + taxaEntrega;
+    const total = subtotal;
 
     subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace(".", ",")}`;
     taxaEntregaEl.textContent = `R$ ${taxaEntrega.toFixed(2).replace(".", ",")}`;

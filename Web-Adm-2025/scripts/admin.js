@@ -186,10 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Exibir nome preferencialmente do cache, senão do objeto, senão id, senão '-'.
                 const displayCliente = (clienteIdForRow && clienteNameCache[String(clienteIdForRow)]) || clienteNome || (clienteIdForRow ? String(clienteIdForRow) : '-');
                 // Preço: usar subtotal do banco
-                let preco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
-                if (!preco && Array.isArray(pedido.itens)) {
-                    preco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+                let subtotal = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+                if (!subtotal && Array.isArray(pedido.itens)) {
+                    subtotal = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
                 }
+                let preco = subtotal; // Mostrar subtotal na tabela
                 let dataPedido = pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-';
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -244,9 +245,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             // Preço — usar subtotal se existir
-            let modalPreco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
-            if (!modalPreco && Array.isArray(pedido.itens)) {
-                modalPreco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+            let modalSubtotal = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+            if (!modalSubtotal && Array.isArray(pedido.itens)) {
+                modalSubtotal = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+            }
+            let modalTaxaEntrega = 0;
+            let modalPreco = modalSubtotal || 0;
+            // Adicionar taxa de entrega se houver endereço de entrega
+            if (pedido.endereco_entrega) {
+                modalTaxaEntrega = 5.00;
+                modalPreco += modalTaxaEntrega;
             }
             // Buscar nome do cliente pelo id se necessário — priorizamos o id gravado na linha (data-cliente-id)
             let clienteNomeModal = pedido.cliente_nome || (pedido.cliente && pedido.cliente.nome) || pedido.nome_cliente || pedido.nome || null;
@@ -285,7 +293,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div><strong>ID:</strong> ${pedido.pedido_id || pedido.id || '-'}</div>
                     <div><strong>Cliente:</strong> ${clienteNomeModal}</div>
                     <div><strong>Data:</strong> ${pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-'}</div>
-                    <div><strong>Preço:</strong> R$ ${modalPreco ? Number(modalPreco).toFixed(2).replace('.', ',') : '-'}</div>
+                    <div><strong>Subtotal:</strong> R$ ${modalSubtotal ? Number(modalSubtotal).toFixed(2).replace('.', ',') : '-'}</div>
+                    <div><strong>Total (com entrega):</strong> R$ ${modalPreco ? Number(modalPreco + 5.00).toFixed(2).replace('.', ',') : '-'}</div>
                 </div>
             `;
             modal.style.display = 'flex';
