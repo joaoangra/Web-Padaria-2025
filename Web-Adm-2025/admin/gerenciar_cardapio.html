@@ -12,37 +12,26 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- Estilos Base Consolidados (apontando para a pasta do admin) -->
+    <!-- Estilos CSS -->
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/header.css">
     <link rel="stylesheet" href="../styles/admin.css">
-    
-    <!-- Estilos da Página (Cardápio Admin Consolidado) -->
     <link rel="stylesheet" href="../styles/cardapio_admin.css">
 
 </head>
 <body>
-    <!-- Cabeçalho -->
+    <!-- Cabeçalho Consistente -->
     <header class="header">
         <a href="dashboard.html" class="logo" aria-label="Ir para o Dashboard">
             <img src="../../docs/logoPN.png" alt="Logo Paladar Nobre">
         </a>
-
         <nav class="navbar" aria-label="Navegação principal">
             <ul id="admin-nav-list">
-                <li><a href="dashboard.html" class="nav-link">
-                    <i class="fas fa-chart-line"></i> 
-                    <span>Painel Admin</span>
-                </a></li>
-                <li><a href="gerenciar_cardapio.html" class="nav-link active">
-                    <i class="fas fa-utensils"></i>
-                    <span>Gerenciar Cardápio</span>
-                </a></li>
-                <li><a href="gerenciar_pedidos.html" class="nav-link">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Gerenciar Pedidos</span>
-                </a></li>
-                <!-- O menu de usuário/logout será injetado pelo auth.js -->
+                <li><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> <span>Painel Admin</span></a></li>
+                <li><a href="gerenciar_usuarios.html" class="nav-link"><i class="fas fa-users"></i> <span>Usuários</span></a></li>
+                <li><a href="gerenciar_cardapio.html" class="nav-link active"><i class="fas fa-utensils"></i> <span>Cardápio</span></a></li>
+                <li><a href="gerenciar_pedidos.html" class="nav-link"><i class="fas fa-clipboard-list"></i> <span>Pedidos</span></a></li>
+                <!-- O botão de Logout será adicionado pelo admin.js -->
             </ul>
         </nav>
     </header>
@@ -51,73 +40,69 @@
     <main class="admin-container" id="cardapio-admin-container">
         <h1 class="heading">Gerenciar <span>CARDÁPIO</span></h1>
         
-        <!-- Formulário de Adição/Edição (Aberto na página) -->
+        <!-- Formulário de Adição/Edição Otimizado -->
         <div class="form-add-item">
-            <h3>Adicionar Novo Item</h3>
+            <h3 id="form-title">Adicionar Novo Item</h3>
             <form id="item-form" class="form-grid" novalidate>
+                <!-- Campo oculto para armazenar o ID do item durante a edição -->
                 <input type="hidden" id="item-id" name="id">
                 
+                <!-- Linha 1: Nome, Preço, Estoque -->
                 <div class="form-group">
                     <label class="form-label" for="item-nome">Nome do Produto</label>
                     <input type="text" class="form-control" id="item-nome" name="nome" required placeholder="Ex: Pão Francês">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="item-preco">Preço (R$)</label>
-                    <input type="number" class="form-control" id="item-preco" name="preco" step="0.01" min="0" required placeholder="0.00">
+                    <label class="form-label" for="item-preco">Preço (R$ )</label>
+                    <input type="number" class="form-control" id="item-preco" name="preco" step="0.01" min="0" required placeholder="Ex: 0.50">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="item-estoque">Estoque (Qtd)</label>
-                    <input type="number" class="form-control" id="item-estoque" name="qtd_estoque" min="0" required placeholder="100">
+                    <label class="form-label" for="item-qtd_estoque">Estoque (Qtd)</label>
+                    <input type="number" class="form-control" id="item-qtd_estoque" name="qtd_estoque" min="0" required placeholder="Ex: 100">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="item-categoria">Categoria</label>
-                    <select class="form-control" id="item-categoria" name="categoria" required>
-                        <option value="Geral">Geral</option>
-                        <option value="Pães">Pães</option>
-                        <option value="Doces">Doces</option>
-                        <option value="Salgados">Salgados</option>
-                        <option value="Bebidas">Bebidas</option>
-                    </select>
-                </div>
-                
-                <div class="form-group form-full-width">
+                <!-- Linha 2: URL da Imagem e Descrição -->
+                <div class="form-group form-span-2">
                     <label class="form-label" for="item-imagem">URL da Imagem</label>
                     <input type="url" class="form-control" id="item-imagem" name="imagem" required placeholder="https://exemplo.com/imagem.jpg">
                 </div>
 
-                <div class="form-group form-full-width">
+                <div class="form-group form-span-3">
                     <label class="form-label" for="item-descricao">Descrição</label>
-                    <textarea class="form-control" id="item-descricao" name="descricao" rows="3" required placeholder="Descrição detalhada do produto"></textarea>
+                    <textarea class="form-control" id="item-descricao" name="descricao" rows="3" required placeholder="Ingredientes, tamanho, etc."></textarea>
                 </div>
                 
-                <div class="form-group form-full-width">
-                    <button type="submit" class="btn btn-primary btn-submit" id="save-item-btn">
+                <!-- Linha 3: Botões de Ação -->
+                <div class="form-group form-span-3 form-buttons">
+                    <button type="submit" class="btn btn-primary" id="save-item-btn">
                         <i class="fas fa-save"></i>
-                        <span>Salvar Item</span>
+                        <span id="save-btn-text">Salvar Item</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="display: none;">
+                        <i class="fas fa-times"></i>
+                        <span>Cancelar Edição</span>
                     </button>
                 </div>
             </form>
         </div>
 
-        <!-- Filtros e Busca (Usando a estrutura do cardapio_admin.css) -->
+        <!-- Filtros e Busca (Simplificado ) -->
         <div class="filter-container">
-            <h3>Filtros e Busca</h3>
+            <h3>Busca de Produtos</h3>
             <div class="filter-form">
                 <div class="form-group">
                     <label class="form-label" for="search-input">Buscar por Nome</label>
-                    <input type="text" class="form-control" id="search-input" placeholder="Nome do produto...">
+                    <input type="text" class="form-control" id="search-input" placeholder="Digite o nome do produto para buscar...">
                 </div>
-
                 <button class="btn btn-secondary" id="apply-filters-btn">
-                    <i class="fas fa-filter"></i> Aplicar Filtros
+                    <i class="fas fa-search"></i> Buscar
                 </button>
             </div>
         </div>
 
-        <!-- Tabela de Produtos -->
+        <!-- Tabela de Produtos Limpa -->
         <div class="admin-table-container">
             <table class="table admin-table">
                 <thead>
@@ -136,28 +121,7 @@
         </div>
     </main>
 
-    <!-- Modal de Edição/Adição (Mantido, mas o formulário principal será usado) -->
-    <!-- Este modal será usado apenas para a função de "Editar" -->
-    <div id="adminModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
-        <div class="modal-content">
-            <header class="modal-header">
-                <h2 id="modal-title" class="heading">
-                    <span>Editar Item</span>
-                </h2>
-                <button type="button" class="close-admin-modal close" aria-label="Fechar modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </header>
-            <div class="modal-body">
-                <!-- O formulário será preenchido e submetido via JS -->
-                <p>Use o formulário acima para editar o item.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts Consolidados (apontando para a pasta do admin) -->
-    <script src="../scripts/header.js"></script>
-    <script src="../scripts/auth.js"></script>
+    <!-- Script principal que controla toda a lógica do painel -->
     <script src="../scripts/admin.js"></script>
 </body>
 </html>
