@@ -3,7 +3,7 @@
 
 const BASE_URL = 'https://api-padaria-seven.vercel.app';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', ( ) => {
     // cache simples de nomes de clientes por id para evitar fetchs repetidos
     const clienteNameCache = {};
     // ===================== SEGURANÇA =====================
@@ -22,37 +22,50 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadUsuarios() {
         const usuariosTable = document.getElementById('usuarios-table-body');
         if (!usuariosTable) return;
-        // A tabela tem 5 colunas (ID, Nome, Email, Nível, Ações)
+        
         usuariosTable.innerHTML = '<tr><td colspan="5">Carregando usuários...</td></tr>';
+        
         try {
-            // Incluir token se presente (alguns backends exigem Authorization)
+            // CORREÇÃO: Garante que o token de autenticação seja enviado no cabeçalho.
+            // A API de usuários deve exigir autenticação para listar os clientes.
             const token = localStorage.getItem('authToken');
-            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            if (!token) {
+                // Se não houver token, não prossegue com a chamada à API.
+                throw new Error('Token de autenticação não encontrado. Faça o login novamente.');
+            }
+
+            const headers = {
+                'Authorization': `Bearer ${token}`
+            };
+
             const resp = await fetch(`${BASE_URL}/clientes`, { headers });
+
             if (!resp.ok) {
-                // Tentar extrair mensagem do corpo para diagnóstico
+                // Se a resposta for 401 (Não Autorizado) ou 403 (Proibido), o token pode ser inválido.
+                if (resp.status === 401 || resp.status === 403) {
+                     throw new Error(`Acesso negado pela API. Verifique se o token é válido e se o usuário é administrador. (HTTP ${resp.status})`);
+                }
                 let bodyText = '';
                 try { bodyText = await resp.text(); } catch (e) { bodyText = ''; }
                 throw new Error(`Falha ao carregar usuários. URL: ${BASE_URL}/clientes | HTTP ${resp.status} ${resp.statusText} | ${bodyText}`);
             }
+            
             let usuarios = await resp.json();
             if (!Array.isArray(usuarios)) usuarios = Object.values(usuarios);
+            
             usuariosTable.innerHTML = '';
             if (!usuarios.length) {
                 usuariosTable.innerHTML = '<tr><td colspan="5">Nenhum usuário encontrado.</td></tr>';
                 return;
             }
+            
             usuarios.forEach(usuario => {
-                // Tratar campos alternativos
                 let id = usuario.id || usuario.cliente_id || usuario.usuario_id || '-';
                 let nome = usuario.nome || usuario.name || usuario.usuario || '-';
                 let email = usuario.email || usuario.login || usuario.usuario_email || '-';
-                let tipo = usuario.tipo || usuario.role || usuario.nivel || '-';
-                let criado = usuario.createdAt || usuario.data_criacao || usuario.criado_em || '-';
-                let status = usuario.status || usuario.ativo || usuario.situacao || '-';
+                let tipo = usuario.tipo || usuario.role || usuario.nivel || 'cliente'; // Default para 'cliente'
+                
                 const row = document.createElement('tr');
-                // Renderizar somente as 5 colunas previstas no cabeçalho
-                // Exibir apenas o botão de exclusão conforme solicitação
                 row.innerHTML = `
                     <td>${id}</td>
                     <td>${nome}</td>
@@ -68,8 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (err) {
             console.error('Erro ao carregar usuários:', err);
-            // Mostrar mensagem de erro detalhada na UI (resumida)
-            const msg = String(err.message || err).slice(0, 500); // limitar tamanho exibido
+            const msg = String(err.message || err).slice(0, 500);
             usuariosTable.innerHTML = `
                 <tr>
                     <td colspan="5">Erro ao carregar usuários: <strong>${msg}</strong>
@@ -91,7 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'delete') {
             if (!confirm('Deseja remover este usuário?')) return;
             try {
-                const resp = await fetch(`${BASE_URL}/clientes/${id}`, { method: 'DELETE' });
+                const token = localStorage.getItem('authToken');
+                const resp = await fetch(`${BASE_URL}/clientes/${id}`, { 
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (!resp.ok) throw new Error('Falha ao remover usuário');
                 alert('Usuário removido com sucesso.');
                 loadUsuarios();
@@ -102,9 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const novoNome = prompt('Novo nome para o usuário:');
             if (novoNome) {
                 try {
+                    const token = localStorage.getItem('authToken');
                     const resp = await fetch(`${BASE_URL}/clientes/${id}`, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
                         body: JSON.stringify({ nome: novoNome })
                     });
                     if (!resp.ok) throw new Error('Falha ao editar usuário');
@@ -154,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             pedidos.forEach(pedido => {
                 let clienteNome = pedido.cliente_nome || (pedido.cliente && pedido.cliente.nome) || pedido.nome_cliente || pedido.nome || null;
-                // Extrair clienteId explicitamente (pode ser string/number ou objeto). Tentamos várias estratégias para não receber null.
                 let clienteIdForRow = null;
                 if (pedido.clienteId) clienteIdForRow = pedido.clienteId;
                 else if (pedido.cliente_id) clienteIdForRow = pedido.cliente_id;
@@ -163,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (typeof pedido.cliente === 'string' || typeof pedido.cliente === 'number') {
                     clienteIdForRow = pedido.cliente;
                 }
-                // Se ainda não encontramos, varrer outras chaves que possam conter o id do cliente
                 if (!clienteIdForRow) {
                     for (const k of Object.keys(pedido)) {
                         if (/cliente(_?id)?$/i.test(k) || /^clienteid$/i.test(k)) {
@@ -176,28 +194,31 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (clienteIdForRow) break;
                             }
                         }
-                        // também aceitar chaves que terminem em _id e contenham 'cliente'
                         if (/_id$/i.test(k) && /cliente/i.test(k) && !clienteIdForRow) {
                             const val = pedido[k];
                             if (val && (typeof val === 'string' || typeof val === 'number')) { clienteIdForRow = val; break; }
                         }
                     }
                 }
-                // Exibir nome preferencialmente do cache, senão do objeto, senão id, senão '-'.
                 const displayCliente = (clienteIdForRow && clienteNameCache[String(clienteIdForRow)]) || clienteNome || (clienteIdForRow ? String(clienteIdForRow) : '-');
+                
                 // Preço: usar subtotal do banco
-                let subtotal = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
-                if (!subtotal && Array.isArray(pedido.itens)) {
-                    subtotal = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+                let preco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+                if (!preco && Array.isArray(pedido.itens)) {
+                    preco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
                 }
-                let preco = subtotal; // Mostrar subtotal na tabela
+
+                // CORREÇÃO: Adiciona a taxa de entrega de R$ 5,00 ao valor final do pedido.
+                const taxaEntrega = 5.00;
+                const valorFinal = (preco ? Number(preco) : 0) + taxaEntrega;
+
                 let dataPedido = pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-';
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${pedido.pedido_id || pedido.id || '-'}</td>
                     <td>${displayCliente}</td>
                     <td>${dataPedido}</td>
-                    <td>R$ ${preco ? Number(preco).toFixed(2).replace('.', ',') : '-'}</td>
+                    <td>R$ ${valorFinal.toFixed(2).replace('.', ',')}</td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn btn-edit btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="ver" title="Ver"><i class="fas fa-eye"></i></button>
@@ -206,7 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </td>
                 `;
-                // Salva pedido no atributo do elemento para abrir no modal e armazena o id do cliente separadamente
                 try { row.dataset.pedido = JSON.stringify(pedido); } catch (e) { row.dataset.pedido = '{}'; }
                 row.dataset.clienteId = clienteIdForRow ? String(clienteIdForRow) : '';
                 pedidosTable.appendChild(row);
@@ -232,43 +252,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Erro ao remover pedido.');
             }
         } else if (action === 'ver') {
-            // Abrir modal com os detalhes do pedido (sem status)
             const tr = btn.closest('tr');
             if (!tr) return;
             let pedido = {};
             try { pedido = JSON.parse(tr.dataset.pedido || '{}'); } catch (e) { pedido = {}; }
-            // Se preferir, pode buscar o pedido atualizado na API aqui — por enquanto usamos os dados carregados.
+            
             const modal = document.getElementById('modal-pedido');
             const modalInfo = document.getElementById('modal-pedido-info');
             if (!modal || !modalInfo) {
                 alert('Detalhes do pedido:\n' + JSON.stringify(pedido, null, 2));
                 return;
             }
-            // Preço — usar subtotal se existir
-            let modalSubtotal = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
-            if (!modalSubtotal && Array.isArray(pedido.itens)) {
-                modalSubtotal = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
+            
+            let modalPreco = pedido.sub_total || pedido.subtotal || pedido.total || pedido.valor || pedido.valor_total;
+            if (!modalPreco && Array.isArray(pedido.itens)) {
+                modalPreco = pedido.itens.reduce((sum, item) => sum + ((item.preco_unitario || item.preco || 0) * (item.quantidade || 1)), 0);
             }
-            let modalTaxaEntrega = 0;
-            let modalPreco = modalSubtotal || 0;
-            // Adicionar taxa de entrega se houver endereço de entrega
-            if (pedido.endereco_entrega) {
-                modalTaxaEntrega = 5.00;
-                modalPreco += modalTaxaEntrega;
-            }
-            // Buscar nome do cliente pelo id se necessário — priorizamos o id gravado na linha (data-cliente-id)
+
+            // CORREÇÃO: Adiciona a taxa de entrega também no modal de visualização.
+            const taxaEntrega = 5.00;
+            const valorFinalModal = (modalPreco ? Number(modalPreco) : 0) + taxaEntrega;
+
             let clienteNomeModal = pedido.cliente_nome || (pedido.cliente && pedido.cliente.nome) || pedido.nome_cliente || pedido.nome || null;
             let clienteIdParaBusca = tr?.dataset?.clienteId || null;
             if (!clienteIdParaBusca) {
-                // ainda tentar recuperar do objeto pedido
                 clienteIdParaBusca = pedido.clienteId || pedido.cliente_id || (pedido.cliente && (pedido.cliente.id || pedido.cliente._id)) || null;
             }
             if (!clienteNomeModal && clienteIdParaBusca) {
-                // se for objeto, extrai id
                 if (typeof clienteIdParaBusca === 'object') {
                     clienteIdParaBusca = clienteIdParaBusca.id || clienteIdParaBusca._id || null;
                 }
-                // Primeiro verificar cache
                 if (clienteIdParaBusca && clienteNameCache[String(clienteIdParaBusca)]) {
                     clienteNomeModal = clienteNameCache[String(clienteIdParaBusca)];
                 }
@@ -286,15 +299,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            // Garantia de valor a exibir
             clienteNomeModal = clienteNomeModal || (clienteIdParaBusca ? String(clienteIdParaBusca) : '-') ;
+            
             modalInfo.innerHTML = `
                 <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:1.05rem;color:var(--text-primary);">
                     <div><strong>ID:</strong> ${pedido.pedido_id || pedido.id || '-'}</div>
                     <div><strong>Cliente:</strong> ${clienteNomeModal}</div>
                     <div><strong>Data:</strong> ${pedido.data || pedido.createdAt || pedido.data_pedido || pedido.dataPedido || '-'}</div>
-                    <div><strong>Subtotal:</strong> R$ ${modalSubtotal ? Number(modalSubtotal).toFixed(2).replace('.', ',') : '-'}</div>
-                    <div><strong>Total (com entrega):</strong> R$ ${modalPreco ? Number(modalPreco + 5.00).toFixed(2).replace('.', ',') : '-'}</div>
+                    <div><strong>Subtotal:</strong> R$ ${modalPreco ? Number(modalPreco).toFixed(2).replace('.', ',') : '-'}</div>
+                    <div><strong>Taxa de Entrega:</strong> R$ ${taxaEntrega.toFixed(2).replace('.', ',')}</div>
+                    <hr>
+                    <div><strong>Valor Final:</strong> R$ ${valorFinalModal.toFixed(2).replace('.', ',')}</div>
                 </div>
             `;
             modal.style.display = 'flex';
@@ -314,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fechar modal de pedido (botão e clique fora)
     const modalCloseBtn = document.getElementById('close-modal-pedido');
     const modalPedidoEl = document.getElementById('modal-pedido');
     if (modalCloseBtn && modalPedidoEl) {
@@ -364,7 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Falha ao carregar produtos');
             let cardapio = await response.json();
             if (!Array.isArray(cardapio)) cardapio = Object.values(cardapio);
-            // Filtros: nome, categoria, estoque
             if (filtros.nome) {
                 cardapio = cardapio.filter(item => item.nome && item.nome.toLowerCase().includes(filtros.nome.toLowerCase()));
             }
@@ -409,7 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCardapio({ nome, categoria, estoque });
     });
 
-    // Adicionar/Editar item
     const itemForm = document.getElementById('item-form');
     itemForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -423,12 +435,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         try {
             let resp;
-            // Validação rápida dos campos obrigatórios
-                if (!body.nome || body.preco === '' || body.qtd_estoque === '' || !body.imagem || !body.descricao) {
-                    alert('Preencha todos os campos obrigatórios!');
-                    return;
-                }
-            // POST para adicionar novo produto
+            if (!body.nome || body.preco === '' || body.qtd_estoque === '' || !body.imagem || !body.descricao) {
+                alert('Preencha todos os campos obrigatórios!');
+                return;
+            }
             if (!id) {
                 resp = await fetch(`${BASE_URL}/produtos`, {
                     method: 'POST',
@@ -436,7 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(body)
                 });
             } else {
-                // PATCH para editar produto
                 resp = await fetch(`${BASE_URL}/produtos/${id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -455,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Editar/Excluir item
     tableBody?.addEventListener('click', async (e) => {
         const btn = e.target.closest('button[data-action]');
         if (!btn) return;
@@ -464,7 +472,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tr = btn.closest('tr');
         const item = tr ? JSON.parse(tr.dataset.item || '{}') : {};
         if (action === 'edit') {
-            // Preencher formulário com dados do item
             itemForm['id'].value = item.id || item.produto_id || '';
             itemForm['nome'].value = item.nome || '';
             itemForm['preco'].value = item.preco || '';
