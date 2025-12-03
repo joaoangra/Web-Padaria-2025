@@ -222,7 +222,6 @@ document.addEventListener('DOMContentLoaded', ( ) => {
                     <td>
                         <div class="action-buttons">
                             <button class="btn btn-edit btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="ver" title="Ver"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-primary btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="processar" title="Processar"><i class="fas fa-check"></i></button>
                             <button class="btn btn-delete btn-action" data-id="${pedido.pedido_id || pedido.id}" data-action="delete" title="Remover"><i class="fas fa-trash"></i></button>
                         </div>
                     </td>
