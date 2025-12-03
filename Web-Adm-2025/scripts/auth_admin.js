@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <li class="user-menu">
                 <a href="#" class="user-welcome">Olá, ${user.nome.split(' ')[0]} <i class="fas fa-cog"></i></a>
                 <ul class="dropdown-menu">
-                    <li><a href="../web/perfil.html">Meu Perfil</a></li>
+                    <li><a href="/web/perfil.html">Meu Perfil</a></li>
                     <li><a href="#" id="logout-button">Sair</a></li>
                 </ul>
             </li>
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userData');
                 alert("Você saiu da sua conta.");
-                window.location.href = "../web/cadastro.html";
+                window.location.href = "/web/cadastro.html";
             });
         }
     };
