@@ -370,10 +370,53 @@ async function enviarPedidoParaAPI(dadosDoPedido) {
 
         const result = await response.json();
         console.log("Pedido enviado com sucesso:", result);
+
+        // Após enviar o pedido, atualizar quantidades dos produtos
+        await atualizarQuantidadesProdutos(carrinho);
+
         return result;
     } catch (error) {
         console.error("Erro na função enviarPedidoParaAPI:", error);
         throw error;
+    }
+}
+
+async function atualizarQuantidadesProdutos(carrinho) {
+    const BASE_URL = "https://api-padaria-seven.vercel.app";
+
+    for (const item of carrinho) {
+        try {
+            // Buscar dados atuais do produto
+            const response = await fetch(`${BASE_URL}/produtos/${item.id}`);
+            if (!response.ok) {
+                console.error(`Erro ao buscar produto ${item.id}: ${response.status}`);
+                continue;
+            }
+            const produto = await response.json();
+
+            // Calcular nova quantidade
+            const novaQuantidade = Math.max(0, produto.qtd_estoque - item.quantidade);
+
+            // Atualizar quantidade via PUT
+            const updateResponse = await fetch(`${BASE_URL}/produtos/${item.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...produto,
+                    qtd_estoque: novaQuantidade
+                }),
+            });
+
+            if (!updateResponse.ok) {
+                console.error(`Erro ao atualizar quantidade do produto ${item.id}: ${updateResponse.status}`);
+            } else {
+                console.log(`Quantidade do produto ${item.id} atualizada para ${novaQuantidade}`);
+            }
+        } catch (error) {
+            console.error(`Erro ao atualizar produto ${item.id}:`, error);
+        }
     }
 }
 
