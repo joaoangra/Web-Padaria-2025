@@ -408,7 +408,7 @@ async function loadCardapio(filtros = {}) {
                     <button class="btn btn-delete btn-action" data-id="${item.id || item.produto_id}" data-action="delete"><i class="fas fa-trash"></i></button>
                 </td>
             `;
-            // ***** FIM DA CORREÇÃO *****
+            
 
             row.dataset.item = JSON.stringify(item);
             tableBody.appendChild(row);
