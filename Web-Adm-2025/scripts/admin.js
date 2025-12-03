@@ -461,10 +461,20 @@ async function loadCardapio(filtros = {}) {
                 return;
             }
             itemForm.reset();
+            document.getElementById('form-title').textContent = 'Adicionar Novo Item';
+            document.getElementById('save-btn-text').textContent = 'Salvar Item';
+            document.getElementById('cancel-edit-btn').style.display = 'none';
             loadCardapio();
         } catch (err) {
             alert('Erro ao salvar item: ' + (err.message || err));
         }
+    });
+
+    document.getElementById('cancel-edit-btn')?.addEventListener('click', () => {
+        itemForm.reset();
+        document.getElementById('form-title').textContent = 'Adicionar Novo Item';
+        document.getElementById('save-btn-text').textContent = 'Salvar Item';
+        document.getElementById('cancel-edit-btn').style.display = 'none';
     });
 
     tableBody?.addEventListener('click', async (e) => {
@@ -479,9 +489,11 @@ async function loadCardapio(filtros = {}) {
             itemForm['nome'].value = item.nome || '';
             itemForm['preco'].value = item.preco || '';
             itemForm['qtd_estoque'].value = item.qtd_estoque || '';
-            itemForm['categoria'].value = item.categoria || 'Geral';
             itemForm['imagem'].value = item.imagem || '';
             itemForm['descricao'].value = item.descricao || '';
+            document.getElementById('form-title').textContent = 'Editar Item';
+            document.getElementById('save-btn-text').textContent = 'Atualizar Item';
+            document.getElementById('cancel-edit-btn').style.display = 'inline-block';
             window.scrollTo({ top: itemForm.offsetTop - 40, behavior: 'smooth' });
         } else if (action === 'delete') {
             if (!confirm('Deseja remover este item do cardápio?')) return;
